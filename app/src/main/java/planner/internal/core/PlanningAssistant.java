@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.List;
 import evolution.core.EvolutionManager;
 import evolution.core.Population;
+import planner.internal.data.DataManager;
+import planner.internal.data.FileSystem;
 import planner.internal.item.Agenda;
 import planner.internal.item.Event;
 import planner.internal.item.Schedule;
@@ -12,16 +14,18 @@ import planner.internal.item.Task;
 
 public class PlanningAssistant {
 
-	private FileManager fileManager;
+	private static PlanningAssistant planningAssistant;
+
+	private DataManager dataManager;
 	private Agenda agenda;
 	private ScheduleGenome currentGenome;
 	private Schedule schedule;
 
 	public PlanningAssistant() {
-		fileManager = new FileManager();
-		agenda = fileManager.loadAgenda();
+		dataManager = new FileSystem();
+		agenda = dataManager.loadAgenda();
 		if (agenda != null) {
-			currentGenome = fileManager.loadScheduleGenome();
+			currentGenome = dataManager.loadScheduleGenome();
 			if (currentGenome != null) {
 				currentGenome.setAgenda(agenda);
 				schedule = currentGenome.generateSchedule();
@@ -50,8 +54,8 @@ public class PlanningAssistant {
 
 	public void save() {
 		agenda.clean();
-		fileManager.saveAgenda(agenda);
-		fileManager.saveScheduleGenome(currentGenome);
+		dataManager.saveAgenda(agenda);
+		dataManager.saveScheduleGenome(currentGenome);
 	}
 
 	public Tab getFirst() {
@@ -93,5 +97,11 @@ public class PlanningAssistant {
 
 	public Schedule getSchedule() {
 		return schedule;
+	}
+
+	public static PlanningAssistant getInstance() {
+		if (planningAssistant == null)
+			planningAssistant = new PlanningAssistant();
+		return planningAssistant;
 	}
 }

@@ -1,4 +1,4 @@
-package planner.internal.core;
+package planner.internal.data;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -6,15 +6,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import planner.internal.core.ScheduleGenome;
 import planner.internal.item.Agenda;
 import planner.internal.item.Schedule;
 
-public class FileManager {
+public class FileSystem implements DataManager{
 	
 	public final String agendaFile = "data/agenda";
-	public final String scheduleFile = "data/schedule";
 	public final String genomeFile = "data/scheduleGenome";
-	
+
+	@Override
 	public boolean saveAgenda(Agenda agenda) {
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(agendaFile));
@@ -25,7 +26,8 @@ public class FileManager {
 			return false;
 		}
 	}
-	
+
+	@Override
 	public Agenda loadAgenda() {
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(agendaFile));
@@ -38,29 +40,7 @@ public class FileManager {
 		}
 	}
 
-	public boolean saveSchedule(Schedule schedule) {
-		try {
-			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(scheduleFile));
-			out.writeObject(schedule);
-			out.close();
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
-	
-	public Schedule loadSchedule() {
-		try {
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream(scheduleFile));
-			Schedule schedule = (Schedule) in.readObject();
-			in.close();
-			return schedule;
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
+	@Override
 	public boolean saveScheduleGenome(ScheduleGenome scheduleGenome) {
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(genomeFile));
@@ -71,7 +51,8 @@ public class FileManager {
 			return false;
 		}
 	}
-	
+
+	@Override
 	public ScheduleGenome loadScheduleGenome() {
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(genomeFile));
