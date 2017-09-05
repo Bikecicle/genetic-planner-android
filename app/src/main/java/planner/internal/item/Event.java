@@ -1,6 +1,5 @@
 package planner.internal.item;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,27 +27,14 @@ public class Event extends Item implements Comparable<Event> {
 		recurrence = null;
 	}
 
-	public Event(String title, String details, String startDate, int minutes, Recurrence recurrence, String endDate) {
+	public Event(String title, String details, long start, long duration, Recurrence recurrence, long end) {
 		super(title, details);
-		Calendar c = Calendar.getInstance();
-		try {
-			c.setTime(new SimpleDateFormat(C.DATE_TIME_FORMAT).parse(startDate));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		start = c.getTimeInMillis();
-		duration = C.MINUTE * minutes;
+		this.start = start;
+		this.duration = duration;
 		if (recurrence != null) {
 			this.recurrence = recurrence;
+			this.end = end;
 			recurring = true;
-			try {
-				c.setTime(new SimpleDateFormat(C.DATE_TIME_FORMAT).parse(endDate));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			end = c.getTimeInMillis();
 		}
 	}
 

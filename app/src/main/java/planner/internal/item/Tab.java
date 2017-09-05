@@ -46,6 +46,7 @@ public class Tab implements Comparable<Tab>, Serializable {
 		String str = f.format(getStartDate().getTime()) + " - " + f.format(getEndDate().getTime()) + ": " + title;
 		if (details != null && !details.equals(""))
 			str += " - " + details;
+		str += " [" + getId() + "]";
 		return str;
 	}
 
@@ -83,5 +84,9 @@ public class Tab implements Comparable<Tab>, Serializable {
 
 	public Item getParent() {
 		return parent;
+	}
+	
+	public int getId() {
+		return hashCode();
 	}
 }

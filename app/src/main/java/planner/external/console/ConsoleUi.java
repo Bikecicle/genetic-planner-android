@@ -1,5 +1,7 @@
 package planner.external.console;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.Scanner;
 
 import planner.internal.core.C;
 import planner.internal.core.PlanningAssistant;
+import planner.internal.file.WinFileSys;
 import planner.internal.item.Event;
 import planner.internal.item.Tab;
 import planner.internal.item.Task;
@@ -21,14 +24,14 @@ public class ConsoleUi {
 	private Calendar current;
 
 	public ConsoleUi() {
-		planningAssistant = new PlanningAssistant();
+		planningAssistant = new PlanningAssistant(new WinFileSys());
 		in = new Scanner(System.in);
 		current = Calendar.getInstance();
 	}
 
 	private void menu() {
 		System.out.println("View: focus, day, week, month, agenda");
-		System.out.println("Actions: add, reschedule, clear, exit");
+		System.out.println("Actions: add, edit, reschedule, clear, save, exit");
 		String action = in.nextLine();
 		if (action.equals("focus")) {
 			focusView();
@@ -46,6 +49,8 @@ public class ConsoleUi {
 			menu();
 		} else if (action.equals("add")) {
 			addMain();
+		} else if (action.equals("edit")) {
+			editView();
 		} else if (action.equals("reschedule")) {
 			planningAssistant.planSchedule();
 			System.out.println("Schedule re-planned");
@@ -53,6 +58,11 @@ public class ConsoleUi {
 		} else if (action.equals("clear")) {
 			planningAssistant.clean();
 			System.out.println("Agenda cleared");
+			menu();
+		} else if (action.equals("save")) {
+			System.out.println("Saving...");
+			planningAssistant.save();
+			System.out.println("Complete");
 			menu();
 		} else if (action.equals("exit")) {
 			System.out.println("Saving...");
@@ -62,6 +72,32 @@ public class ConsoleUi {
 			System.out.println("Get better at input loser");
 			menu();
 		}
+	}
+
+	private void editView() {
+		System.out.println("All tabs:");
+		List<Tab> tabs = planningAssistant.getAll();
+		for (Tab tab : tabs) {
+			System.out.println(tab);
+		}
+		System.out.println("Enter id:");
+		int id = in.nextInt();
+		in.nextLine();
+		Tab tab = planningAssistant.getById(id);
+		System.out.println(tab);
+		System.out.println("Actions: delete parent, menu");
+		String action = in.nextLine();
+		if (action.equals("delete parent")) {
+			planningAssistant.deleteItem(tab.getParent());
+			planningAssistant.planSchedule();
+			System.out.println("Parent removed");
+			menu();
+		} else if (action.equals("menu")) {
+			menu();
+		} else {
+			editView();
+		}
+
 	}
 
 	private void focusView() {
@@ -184,17 +220,17 @@ public class ConsoleUi {
 		System.out.println("Details:");
 		String details = in.nextLine();
 		System.out.println("Date (" + C.DATE_TIME_FORMAT + "):");
-		String startDate = in.nextLine();
-		System.out.println("Duration (minutes):");
-		String minutesStr = in.nextLine();
+		long startDate = dateInput();
+		System.out.println("Duration (" + C.TIME_FORMAT + "):");
+		long duration = timeInput();
 		System.out.println("Recurring? (y/n):");
 		String recurring = in.nextLine();
-		Recurrence recurrence = null;
-		String endDate = null;
+		Event newEvent = null;
 		if (recurring.equals("y")) {
 			System.out.println("Scale: daily, weekly, monthly, yearly");
 			String scaleStr = in.nextLine();
 			int scale = -1;
+			List<Marker> markers = new ArrayList<Marker>();
 			while (scale == -1) {
 				if (scaleStr.equals("daily")) {
 					scale = Calendar.DAY_OF_WEEK;
@@ -202,6 +238,14 @@ public class ConsoleUi {
 				} else if (scaleStr.equals("weekly")) {
 					scale = Calendar.WEEK_OF_MONTH;
 					scaleStr = "weeks";
+					System.out.println("Days of week (day:index - separated by spaces):");
+					String daysOfWeekStr = in.nextLine();
+					String markersStr[] = daysOfWeekStr.split(" ");
+					for (String markerStr : markersStr) {
+						String markerFieldsStr[] = markerStr.split(":");
+						markers.add(new Marker(Calendar.DAY_OF_WEEK, Integer.parseInt(markerFieldsStr[0]),
+								Integer.parseInt(markerFieldsStr[1])));
+					}
 				} else if (scaleStr.equals("monthly")) {
 					scale = Calendar.MONTH;
 					scaleStr = "months";
@@ -212,23 +256,13 @@ public class ConsoleUi {
 			}
 			System.out.println("Period (every x " + scaleStr + "):");
 			String periodStr = in.nextLine();
-			System.out.println("Markers (type:value:index - separated by spaces):");
-			String markersStr = in.nextLine();
-			List<Marker> markers = new ArrayList<Marker>();
-			if (!markersStr.equals("")) {
-				String[] markersArr = markersStr.split(" ");
-
-				for (String markerStr : markersArr) {
-					String[] marker = markerStr.split(":");
-					markers.add(new Marker(Integer.valueOf(marker[0]), Integer.valueOf(marker[1]),
-							Integer.valueOf(marker[2])));
-				}
-			}
 			System.out.println("End date (" + C.DATE_TIME_FORMAT + "):");
-			endDate = in.nextLine();
-			recurrence = new Recurrence(scale, Integer.valueOf(periodStr), markers);
+			long endDate = dateInput();
+			Recurrence recurrence = new Recurrence(scale, Integer.valueOf(periodStr), markers);
+			newEvent = new Event(title, details, startDate, duration, recurrence, endDate);
+		} else {
+			newEvent = new Event(title, details, startDate, duration);
 		}
-		Event newEvent = new Event(title, details, startDate, Integer.valueOf(minutesStr), recurrence, endDate);
 		planningAssistant.addEvent(newEvent);
 		planningAssistant.planSchedule();
 		System.out.println("Event added:");
@@ -241,16 +275,51 @@ public class ConsoleUi {
 		String title = in.nextLine();
 		System.out.println("Details:");
 		String details = in.nextLine();
-		System.out.println("Deadline (" + C.DATE_TIME_FORMAT + "):");
-		String deadlineDate = in.nextLine();
-		System.out.println("Expected time to complete (minutes):");
-		String minutesStr = in.nextLine();
-		Task newTask = new Task(title, details, deadlineDate, Integer.valueOf(minutesStr));
+		System.out.println("Input days from now?: y/n");
+		String format = in.nextLine();
+		long deadline = 0;
+		if (format.equals("y")) {
+			System.out.println("Days:");
+			int days = in.nextInt();
+			in.nextLine();
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.DAY_OF_WEEK, days);
+			deadline = c.getTimeInMillis();
+		} else {
+			System.out.println("Deadline (" + C.DATE_TIME_FORMAT + "):");
+			deadline = dateInput();
+		}
+		System.out.println("Expected time to complete (" + C.TIME_FORMAT + "):");
+		long minutes = timeInput() / C.MINUTE;
+		Task newTask = new Task(title, details, deadline, minutes);
 		planningAssistant.addTask(newTask);
 		planningAssistant.planSchedule();
 		System.out.println("Task added:");
 		System.out.println(newTask);
 		addMain();
+	}
+
+	public long dateInput() {
+		String date = in.nextLine();
+		Calendar c = Calendar.getInstance();
+		try {
+			c.setTime(new SimpleDateFormat(C.DATE_TIME_FORMAT).parse(date));
+		} catch (ParseException e) {
+			return dateInput();
+		}
+		return c.getTimeInMillis();
+	}
+
+	public long timeInput() {
+		String time = in.nextLine();
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(0);
+		try {
+			c.setTime(new SimpleDateFormat(C.TIME_FORMAT).parse(time));
+		} catch (ParseException e) {
+			return timeInput();
+		}
+		return c.getTimeInMillis();
 	}
 
 	public static void main(String[] args) {

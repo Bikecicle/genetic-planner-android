@@ -4,28 +4,27 @@ import java.util.Calendar;
 import java.util.List;
 import evolution.core.EvolutionManager;
 import evolution.core.Population;
-import planner.internal.data.DataManager;
-import planner.internal.data.FileSystem;
+import planner.internal.file.FileManager;
+import planner.internal.file.WinFileSys;
 import planner.internal.item.Agenda;
 import planner.internal.item.Event;
+import planner.internal.item.Item;
 import planner.internal.item.Schedule;
 import planner.internal.item.Tab;
 import planner.internal.item.Task;
 
 public class PlanningAssistant {
 
-	private static PlanningAssistant planningAssistant;
-
-	private DataManager dataManager;
+	private FileManager fileManager;
 	private Agenda agenda;
 	private ScheduleGenome currentGenome;
 	private Schedule schedule;
 
-	public PlanningAssistant() {
-		dataManager = new FileSystem();
-		agenda = dataManager.loadAgenda();
+	public PlanningAssistant(FileManager fileManager) {
+		this.fileManager = fileManager;
+		agenda = fileManager.loadAgenda();
 		if (agenda != null) {
-			currentGenome = dataManager.loadScheduleGenome();
+			currentGenome = fileManager.loadScheduleGenome();
 			if (currentGenome != null) {
 				currentGenome.setAgenda(agenda);
 				schedule = currentGenome.generateSchedule();
@@ -54,8 +53,8 @@ public class PlanningAssistant {
 
 	public void save() {
 		agenda.clean();
-		dataManager.saveAgenda(agenda);
-		dataManager.saveScheduleGenome(currentGenome);
+		fileManager.saveAgenda(agenda);
+		fileManager.saveScheduleGenome(currentGenome);
 	}
 
 	public Tab getFirst() {
@@ -72,6 +71,10 @@ public class PlanningAssistant {
 
 	public List<Tab> getMonth(Calendar month) {
 		return schedule.getMonth(month);
+	}
+
+	public List<Tab> getAll() {
+		return schedule.getAll();
 	}
 
 	public void addEvent(Event newEvent) {
@@ -99,9 +102,12 @@ public class PlanningAssistant {
 		return schedule;
 	}
 
-	public static PlanningAssistant getInstance() {
-		if (planningAssistant == null)
-			planningAssistant = new PlanningAssistant();
-		return planningAssistant;
+	public Tab getById(int id) {
+		return schedule.getById(id);
+	}
+
+	public void deleteItem(Item parent) {
+		parent.clean();
+		agenda.remove(parent);
 	}
 }

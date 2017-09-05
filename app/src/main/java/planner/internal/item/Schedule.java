@@ -84,8 +84,7 @@ public class Schedule implements Iterable<Tab>, Serializable{
 		for (Tab tab : this) {
 			Calendar start = tab.getStartDate();
 			if (week.get(Calendar.YEAR) == start.get(Calendar.YEAR)
-					&& week.get(Calendar.MONTH) == start.get(Calendar.MONTH)
-					&& week.get(Calendar.WEEK_OF_MONTH) == start.get(Calendar.WEEK_OF_MONTH)) {
+					&& week.get(Calendar.WEEK_OF_YEAR) == start.get(Calendar.WEEK_OF_YEAR)) {
 				tabs.add(tab);
 			} else if (start.after(week)) {
 				break;
@@ -199,6 +198,14 @@ public class Schedule implements Iterable<Tab>, Serializable{
 			str += tab + "\n";
 		}
 		return str;
+	}
+
+	public Tab getById(int id) {
+		for (Tab tab : this) {
+			if (tab.hashCode() == id)
+				return tab;
+		}
+		return null;
 	}
 	
 	

@@ -12,7 +12,6 @@ public class Recurrence implements Serializable {
 	public int period;
 	public List<Marker> markers;
 
-	
 	public Recurrence(int scale, int period, List<Marker> markers) {
 		this.scale = scale;
 		this.period = period;
@@ -42,7 +41,10 @@ public class Recurrence implements Serializable {
 						if (marker.index == i && marker.type == Calendar.DAY_OF_WEEK) {
 							cal.set(Calendar.DAY_OF_WEEK, marker.value);
 							long instance = cal.getTimeInMillis();
-							instances.add(instance);
+							if (instance >= start)
+
+								instances.add(instance);
+
 						}
 					}
 					cal.add(Calendar.WEEK_OF_MONTH, 1);
@@ -64,7 +66,8 @@ public class Recurrence implements Serializable {
 							} else if (marker.type == Calendar.DAY_OF_WEEK_IN_MONTH) {
 								cal.set(Calendar.DAY_OF_WEEK_IN_MONTH, marker.value);
 								long instance = cal.getTimeInMillis();
-								instances.add(instance);
+								if (instance >= start)
+									instances.add(instance);
 							}
 						}
 					}
@@ -82,7 +85,8 @@ public class Recurrence implements Serializable {
 						if (marker.index == i && marker.type == Calendar.DAY_OF_YEAR) {
 							cal.set(Calendar.DAY_OF_YEAR, marker.value);
 							long instance = cal.getTimeInMillis();
-							instances.add(instance);
+							if (instance >= start)
+								instances.add(instance);
 						}
 					}
 					cal.add(Calendar.YEAR, 1);

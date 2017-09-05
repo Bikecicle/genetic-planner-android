@@ -10,7 +10,8 @@ public class C {
 	public static final long HOUR = 3600000; // Milliseconds in an hour
 	public static final long MINUTE = 60000; // Milliseconds in a minute
 	
-	public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
+	public static final String DATE_TIME_FORMAT = "MM/dd/yyyy HH:mm";
+	public static final String TIME_FORMAT = "HH:mm";
 	
 	// Schedule evolution parameters
 	public static final int POPULATION_SIZE = 10;

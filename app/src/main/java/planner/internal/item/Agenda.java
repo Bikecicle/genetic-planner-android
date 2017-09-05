@@ -26,6 +26,11 @@ public class Agenda implements Serializable {
 		tasks.sort(null);
 	}
 
+	public void remove(Item item) {
+		events.remove(item);
+		tasks.remove(item);
+	}
+
 	public void clean() {
 		for (Event event : events) {
 			event.clean();
