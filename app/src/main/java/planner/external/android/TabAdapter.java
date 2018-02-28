@@ -34,7 +34,7 @@ public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
         // create a new view
         TextView v = (TextView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.my_text_view, parent, false);
-        ...
+
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
