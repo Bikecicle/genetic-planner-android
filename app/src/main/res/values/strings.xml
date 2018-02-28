@@ -6,4 +6,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="title_activity_focus_view">FocusView</string>
+    <string name="focusList" />
+    <string name="title_activity_day">DayActivity</string>
 </resources>

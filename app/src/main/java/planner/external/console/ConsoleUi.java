@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 import planner.internal.core.C;
 import planner.internal.core.PlanningAssistant;
-import planner.internal.file.WinFileSys;
+import planner.internal.data.FileSystem;
 import planner.internal.item.Event;
 import planner.internal.item.Tab;
 import planner.internal.item.Task;
@@ -24,7 +24,8 @@ public class ConsoleUi {
 	private Calendar current;
 
 	public ConsoleUi() {
-		planningAssistant = new PlanningAssistant(new WinFileSys());
+		planningAssistant = PlanningAssistant.getInstance();
+		planningAssistant.setDataManager(new FileSystem());
 		in = new Scanner(System.in);
 		current = Calendar.getInstance();
 	}

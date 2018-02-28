@@ -2,10 +2,10 @@ package planner.internal.core;
 
 import java.util.Calendar;
 import java.util.List;
+
 import evolution.core.EvolutionManager;
 import evolution.core.Population;
-import planner.internal.file.FileManager;
-import planner.internal.file.WinFileSys;
+import planner.internal.data.DataManager;
 import planner.internal.item.Agenda;
 import planner.internal.item.Event;
 import planner.internal.item.Item;
@@ -15,99 +15,119 @@ import planner.internal.item.Task;
 
 public class PlanningAssistant {
 
-	private FileManager fileManager;
-	private Agenda agenda;
-	private ScheduleGenome currentGenome;
-	private Schedule schedule;
+    private static PlanningAssistant planningAssistant;
 
-	public PlanningAssistant(FileManager fileManager) {
-		this.fileManager = fileManager;
-		agenda = fileManager.loadAgenda();
-		if (agenda != null) {
-			currentGenome = fileManager.loadScheduleGenome();
-			if (currentGenome != null) {
-				currentGenome.setAgenda(agenda);
-				schedule = currentGenome.generateSchedule();
-			} else {
-				schedule = new Schedule();
-			}
+    private DataManager dataManager;
+    private Agenda agenda;
+    private ScheduleGenome currentGenome;
+    private Schedule schedule;
 
-		} else {
-			agenda = new Agenda();
-			schedule = new Schedule();
-		}
-	}
+    public PlanningAssistant() {
+        agenda = new Agenda();
+        schedule = new Schedule();
+    }
 
-	public void planSchedule() {
-		agenda.clean();
-		Population initialPopulation = new Population();
-		for (int i = 0; i < C.POPULATION_SIZE; i++) {
-			initialPopulation.add(new ScheduleGenome(agenda, C.MUTATION_RATE));
-		}
-		EvolutionManager evolutionManager = new EvolutionManager(initialPopulation, C.SELECTOR, true);
-		evolutionManager.runGenerations(C.GENERATION_COUNT);
-		evolutionManager.saveLog(C.logFile);
-		currentGenome = (ScheduleGenome) evolutionManager.getResult();
-		schedule = currentGenome.generateSchedule();
-	}
+    public static PlanningAssistant getInstance() {
+        if (planningAssistant == null)
+            planningAssistant = new PlanningAssistant();
+        return planningAssistant;
+    }
 
-	public void save() {
-		agenda.clean();
-		fileManager.saveAgenda(agenda);
-		fileManager.saveScheduleGenome(currentGenome);
-	}
+    public void setDataManager(DataManager dataManager) {
+        this.dataManager = dataManager;
+    }
 
-	public Tab getFirst() {
-		return schedule.iterator().next();
-	}
+    public void load() {
+        if (dataManager != null) {
+            agenda = dataManager.loadAgenda();
+            if (agenda != null) {
+                currentGenome = dataManager.loadScheduleGenome();
+                if (currentGenome != null) {
+                    currentGenome.setAgenda(agenda);
+                    schedule = currentGenome.generateSchedule();
+                } else {
+                    schedule = new Schedule();
+                }
 
-	public List<Tab> getDay(Calendar day) {
-		return schedule.getDay(day);
-	}
+            } else {
+                agenda = new Agenda();
+                schedule = new Schedule();
+            }
+        }
+    }
 
-	public List<Tab> getWeek(Calendar week) {
-		return schedule.getWeek(week);
-	}
+    public void save() {
+        if (dataManager != null) {
+            agenda.clean();
+            dataManager.saveAgenda(agenda);
+            dataManager.saveScheduleGenome(currentGenome);
+        }
+    }
 
-	public List<Tab> getMonth(Calendar month) {
-		return schedule.getMonth(month);
-	}
+    public void planSchedule() {
+        agenda.clean();
+        Population initialPopulation = new Population();
+        for (int i = 0; i < C.POPULATION_SIZE; i++) {
+            initialPopulation.add(new ScheduleGenome(agenda, C.MUTATION_RATE));
+        }
+        EvolutionManager evolutionManager = new EvolutionManager(initialPopulation, C.SELECTOR, true);
+        evolutionManager.runGenerations(C.GENERATION_COUNT);
+        evolutionManager.saveLog(C.logFile);
+        currentGenome = (ScheduleGenome) evolutionManager.getResult();
+        schedule = currentGenome.generateSchedule();
+    }
 
-	public List<Tab> getAll() {
-		return schedule.getAll();
-	}
+    public Tab getFirst() {
+        return schedule.iterator().next();
+    }
 
-	public void addEvent(Event newEvent) {
-		agenda.addEvent(newEvent);
-	}
+    public List<Tab> getDay(Calendar day) {
+        return schedule.getDay(day);
+    }
 
-	public void addTask(Task newTask) {
-		agenda.addTask(newTask);
-	}
+    public List<Tab> getWeek(Calendar week) {
+        return schedule.getWeek(week);
+    }
 
-	public void removeTab(Tab tab) {
-		schedule.remove(tab);
-	}
+    public List<Tab> getMonth(Calendar month) {
+        return schedule.getMonth(month);
+    }
 
-	public void clean() {
-		agenda = new Agenda();
-		schedule = new Schedule();
-	}
+    public List<Tab> getAll() {
+        return schedule.getAll();
+    }
 
-	public Agenda getAgenda() {
-		return agenda;
-	}
+    public void addEvent(Event newEvent) {
+        agenda.addEvent(newEvent);
+    }
 
-	public Schedule getSchedule() {
-		return schedule;
-	}
+    public void addTask(Task newTask) {
+        agenda.addTask(newTask);
+    }
 
-	public Tab getById(int id) {
-		return schedule.getById(id);
-	}
+    public void removeTab(Tab tab) {
+        schedule.remove(tab);
+    }
 
-	public void deleteItem(Item parent) {
-		parent.clean();
-		agenda.remove(parent);
-	}
+    public void clean() {
+        agenda = new Agenda();
+        schedule = new Schedule();
+    }
+
+    public Agenda getAgenda() {
+        return agenda;
+    }
+
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    public Tab getById(int id) {
+        return schedule.getById(id);
+    }
+
+    public void deleteItem(Item parent) {
+        parent.clean();
+        agenda.remove(parent);
+    }
 }
