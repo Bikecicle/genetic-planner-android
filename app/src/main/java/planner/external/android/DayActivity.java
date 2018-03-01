@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.Calendar;
+import java.util.List;
 
 import planner.internal.core.PlanningAssistant;
 import planner.internal.item.Tab;
@@ -22,8 +23,7 @@ public class DayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_day);
 
         Calendar interest = Calendar.getInstance();
-        ArrayAdapter<Tab>  = new ArrayAdapter<Tab>(this, R.layout.simple_list_item_1, planningAssistant.getDay(interest));
-        ListView dayView = (ListView) findViewById(R.id.day_list);
-        dayView
+        List<Tab> tabs = planningAssistant.getDay(interest);
+        ArrayAdapter<Tab> tabArrayAdapter = new ArrayAdapter<Tab>(this, R.layout., );
     }
 }

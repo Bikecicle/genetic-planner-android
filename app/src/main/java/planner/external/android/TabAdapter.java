@@ -1,56 +1,41 @@
 package planner.external.android;
 
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import java.util.List;
 
 import planner.internal.item.Tab;
 
-public class TabAdapter extends RecyclerView.Adapter<TabAdapter.ViewHolder> {
-    private Tab[] tabs;
+/**
+ * Created by Griffin on 3/1/2018.
+ */
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView mTextView;
-        public ViewHolder(TextView v) {
-            super(v);
-            mTextView = v;
+public class TabAdapter extends ArrayAdapter<Tab> {
+
+    public TabAdapter(Context context, List<Tab> data) {
+        super(context, 0, data);
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tab, parent, false)
         }
+
+        User user = getItem(position);
+
+        // TODO: Define fields to show
+
+        // TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
+
+        // tvName.setText(user.getName());
+
+        return convertView;
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public TabAdapter(Tab[] tabs) {
-        this.tabs = tabs;
-    }
-
-    // Create new views (invoked by the layout manager)
-    @Override
-    public TabAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
-        // create a new view
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.my_text_view, parent, false);
-
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
-    }
-
-    // Replace the contents of a view (invoked by the layout manager)
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        holder.mTextView.setText(mDataset[position]);
-
-    }
-
-    // Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return mDataset.length;
-    }
 }
