@@ -11,6 +11,7 @@ public class C {
 	public static final long MINUTE = 60000; // Milliseconds in a minute
 	
 	public static final String DATE_TIME_FORMAT = "MM/dd/yyyy HH:mm";
+	public static final String DAY_FORMAT = "MM/dd/yyyy";
 	public static final String TIME_FORMAT = "HH:mm";
 	
 	// Schedule evolution parameters

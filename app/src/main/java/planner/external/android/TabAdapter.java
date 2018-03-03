@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
+import planner.internal.core.C;
 import planner.internal.item.Tab;
 
 /**
@@ -17,25 +19,28 @@ import planner.internal.item.Tab;
 
 public class TabAdapter extends ArrayAdapter<Tab> {
 
-    public TabAdapter(Context context, List<Tab> data) {
+    private String dtFormat;
+
+    public TabAdapter(Context context, List<Tab> data, String dtFormat) {
         super(context, 0, data);
+        this.dtFormat = dtFormat;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tab, parent, false)
-        }
+        if (convertView == null)
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tab, parent, false);
 
-        User user = getItem(position);
+        Tab tab = getItem(position);
 
-        // TODO: Define fields to show
+        TextView tvStart = convertView.findViewById(R.id.tvStart);
+        TextView tvTitle = convertView.findViewById(R.id.tvTitle);
+        TextView tvDetails = convertView.findViewById(R.id.tvDetails);
 
-        // TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
-
-        // tvName.setText(user.getName());
+        tvStart.setText(new SimpleDateFormat(dtFormat).format(tab.getStartDate().getTime()));
+        tvTitle.setText(tab.getTitle());
+        tvDetails.setText(tab.getDetails());
 
         return convertView;
     }
-
 }

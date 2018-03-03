@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Genetic Planner</string>
+    <string name="day_view_title">Day View</string>
+    <string name="interest">Interest</string>
 </resources>
