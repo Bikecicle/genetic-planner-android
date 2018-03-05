@@ -10,17 +10,17 @@ public abstract class Item implements Serializable {
 	protected String title;
 	protected String details;
 
-	protected List<Tab> tabs;
+	protected List<Note> notes;
 
 	public Item(String title, String details) {
 		this.title = title;
 		this.details = details;
-		this.tabs = new ArrayList<Tab>();
+		this.notes = new ArrayList<Note>();
 	}
 	
-	public abstract List<Tab> generateTabs(long[] gene);
+	public abstract List<Note> generateTabs(long[] gene);
 	
-	public abstract void complete(Tab tab);
+	public abstract void complete(Note note);
 
 	public String getTitle() {
 		return title;
@@ -38,16 +38,16 @@ public abstract class Item implements Serializable {
 		this.details = details;
 	}
 
-	public List<Tab> getTabs() {
-		return tabs;
+	public List<Note> getNotes() {
+		return notes;
 	}
 
-	public void setTabs(List<Tab> tabs) {
-		this.tabs = tabs;
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
 	}
 	
 	public void clean() {
-		tabs.clear();
+		notes.clear();
 	}
 
 }

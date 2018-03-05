@@ -40,8 +40,8 @@ public class Task extends Item implements Comparable<Task> {
 	}
 
 	@Override
-	public List<Tab> generateTabs(long[] genome) {
-		List<Tab> newTabs = new ArrayList<Tab>();
+	public List<Note> generateTabs(long[] genome) {
+		List<Note> newNotes = new ArrayList<Note>();
 		for (int i = 0; i < genome.length; i++) {
 			long tabDuration = 0;
 			if (getRemaining() > C.HOUR) {
@@ -51,17 +51,17 @@ public class Task extends Item implements Comparable<Task> {
 				tabDuration = getRemaining();
 				planned += getRemaining();
 			}
-			newTabs.add(new Tab(title, details, genome[i], tabDuration, this));
+			newNotes.add(new Note(title, details, genome[i], tabDuration, this));
 		}
-		tabs.addAll(newTabs);
-		return newTabs;
+		notes.addAll(newNotes);
+		return newNotes;
 	}
 
 	@Override
-	public void complete(Tab tab) {
-		planned -= tab.getDuration();
-		complete += tab.getDuration();
-		tabs.remove(tab);
+	public void complete(Note note) {
+		planned -= note.getDuration();
+		complete += note.getDuration();
+		notes.remove(note);
 	}
 
 	@Override

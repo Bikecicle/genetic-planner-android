@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
-public class Schedule implements Iterable<Tab>, Serializable{
+public class Schedule implements Iterable<Note>, Serializable{
 
 	private static final long serialVersionUID = -3734613331222933635L;
 	private Node head;
@@ -18,120 +18,120 @@ public class Schedule implements Iterable<Tab>, Serializable{
 		size = 0;
 	}
 
-	public boolean add(Tab newTab) {
+	public boolean add(Note newNote) {
 		// Check if schedule is empty
 		if (head.next == null) {
-			head.next = new Node(newTab, null);
+			head.next = new Node(newNote, null);
 			size++;
 			return true;
 		}
-		// Check if new tab is the earliest on the schedule
-		if (head.next.tab.compareTo(newTab) > 0) {
-			head.next.tab.compareTo(newTab);
-			head.next = new Node(newTab, head.next);
+		// Check if new note is the earliest on the schedule
+		if (head.next.note.compareTo(newNote) > 0) {
+			head.next.note.compareTo(newNote);
+			head.next = new Node(newNote, head.next);
 			size++;
 			return true;
 		}
 		Node temp = head.next;
 		// Move forward to proper time or the end of the schedule
-		while (temp.next != null && temp.next.tab.compareTo(newTab) < 0)
+		while (temp.next != null && temp.next.note.compareTo(newNote) < 0)
 			temp = temp.next;
-		// Check if the tab overlaps with the previous
-		if (temp.tab.getEnd() > newTab.getStart())
+		// Check if the note overlaps with the previous
+		if (temp.note.getEnd() > newNote.getStart())
 			return false;
 		// Add to end
 		if (temp.next == null) {
-			temp.next = new Node(newTab, null);
+			temp.next = new Node(newNote, null);
 			size++;
 			return true;
 		}
-		// Check if the new tab overlaps with the next one
-		if (newTab.getEnd() > temp.next.tab.getStart())
+		// Check if the new note overlaps with the next one
+		if (newNote.getEnd() > temp.next.note.getStart())
 			return false;
-		// Add the new tab at the proper time
-		temp.next = new Node(newTab, temp.next);
+		// Add the new note at the proper time
+		temp.next = new Node(newNote, temp.next);
 		size++;
 		return true;
 	}
 	
-	public int addAll(List<Tab> newTabs) {
+	public int addAll(List<Note> newNotes) {
 		int added = 0;
-		for (Tab newTab : newTabs) {
-			if (add(newTab))
+		for (Note newNote : newNotes) {
+			if (add(newNote))
 				added++;
 		}
 		return added;
 	}
 	
-	public List<Tab> getDay(Calendar day) {
-		List<Tab> tabs = new ArrayList<Tab>();
-		for (Tab tab : this) {
-			Calendar start = tab.getStartDate();
+	public List<Note> getDay(Calendar day) {
+		List<Note> notes = new ArrayList<Note>();
+		for (Note note : this) {
+			Calendar start = note.getStartDate();
 			if (day.get(Calendar.YEAR) == start.get(Calendar.YEAR)
 					&& day.get(Calendar.MONTH) == start.get(Calendar.MONTH)
 					&& day.get(Calendar.WEEK_OF_MONTH) == start.get(Calendar.WEEK_OF_MONTH)
 					&& day.get(Calendar.DAY_OF_WEEK) == start.get(Calendar.DAY_OF_WEEK)) {
-				tabs.add(tab);
+				notes.add(note);
 			} else if (start.after(day)) {
 				break;
 			}
 		}
-		return tabs;
+		return notes;
 	}
 
-	public List<Tab> getWeek(Calendar week) {
-		List<Tab> tabs = new ArrayList<Tab>();
-		for (Tab tab : this) {
-			Calendar start = tab.getStartDate();
+	public List<Note> getWeek(Calendar week) {
+		List<Note> notes = new ArrayList<Note>();
+		for (Note note : this) {
+			Calendar start = note.getStartDate();
 			if (week.get(Calendar.YEAR) == start.get(Calendar.YEAR)
 					&& week.get(Calendar.WEEK_OF_YEAR) == start.get(Calendar.WEEK_OF_YEAR)) {
-				tabs.add(tab);
+				notes.add(note);
 			} else if (start.after(week)) {
 				break;
 			}
 		}
-		return tabs;
+		return notes;
 	}
 
-	public List<Tab> getMonth(Calendar month) {
-		List<Tab> tabs = new ArrayList<Tab>();
-		for (Tab tab : this) {
-			Calendar start = tab.getStartDate();
+	public List<Note> getMonth(Calendar month) {
+		List<Note> notes = new ArrayList<Note>();
+		for (Note note : this) {
+			Calendar start = note.getStartDate();
 			if (month.get(Calendar.YEAR) == start.get(Calendar.YEAR)
 					&& month.get(Calendar.MONTH) == start.get(Calendar.MONTH)) {
-				tabs.add(tab);
+				notes.add(note);
 			} else if (start.after(month)) {
 				break;
 			}
 		}
-		return tabs;
+		return notes;
 	}
 	
-	public List<Tab> getYear(Calendar year) {
-		List<Tab> tabs = new ArrayList<Tab>();
-		for (Tab tab : this) {
-			Calendar start = tab.getStartDate();
+	public List<Note> getYear(Calendar year) {
+		List<Note> notes = new ArrayList<Note>();
+		for (Note note : this) {
+			Calendar start = note.getStartDate();
 			if (year.get(Calendar.YEAR) == start.get(Calendar.YEAR)) {
-				tabs.add(tab);
+				notes.add(note);
 			} else if (start.after(year)) {
 				break;
 			}
 		}
-		return tabs;
+		return notes;
 	}
 	
-	public List<Tab> getAll() {
-		List<Tab> tabs = new ArrayList<Tab>();
-		for (Tab tab : this) {
-			tabs.add(tab);
+	public List<Note> getAll() {
+		List<Note> notes = new ArrayList<Note>();
+		for (Note note : this) {
+			notes.add(note);
 		}
-		return tabs;
+		return notes;
 	}
 	
-	public boolean remove(Tab tab) {
+	public boolean remove(Note note) {
 		Node temp = head;
 		while (temp.next != null) {
-			if (temp.next.tab == tab) {
+			if (temp.next.note == note) {
 				temp.next = temp.next.next;
 				return true;
 			}
@@ -140,11 +140,11 @@ public class Schedule implements Iterable<Tab>, Serializable{
 		return false;
 	}
 	
-	public Tab removeFirst() {
+	public Note removeFirst() {
 		if (!isEmpty()) { 
-			Tab tab = head.next.tab;
+			Note note = head.next.note;
 			head.next = head.next.next;
-			return tab;
+			return note;
 		}
 		return null;
 	}
@@ -158,8 +158,8 @@ public class Schedule implements Iterable<Tab>, Serializable{
 	}
 
 	@Override
-	public Iterator<Tab> iterator() {
-		return new Iterator<Tab>() {
+	public Iterator<Note> iterator() {
+		return new Iterator<Note>() {
 			
 			public Node current = head;
 			
@@ -169,11 +169,11 @@ public class Schedule implements Iterable<Tab>, Serializable{
 			}
 
 			@Override
-			public Tab next() {
+			public Note next() {
 				if (!hasNext())
 					return null;
 				current = current.next;
-				return current.tab;
+				return current.note;
 			}
 		};
 	}
@@ -181,12 +181,12 @@ public class Schedule implements Iterable<Tab>, Serializable{
 	private class Node implements Serializable{
 
 		private static final long serialVersionUID = 4757061294462156453L;
-		public Tab tab;
+		public Note note;
 		public Node next;
 
-		public Node(Tab tab, Node next) {
+		public Node(Note note, Node next) {
 			this.next = next;
-			this.tab = tab;
+			this.note = note;
 		}
 
 	}
@@ -194,16 +194,16 @@ public class Schedule implements Iterable<Tab>, Serializable{
 	@Override
 	public String toString() {
 		String str = "";
-		for (Tab tab : this) {
-			str += tab + "\n";
+		for (Note note : this) {
+			str += note + "\n";
 		}
 		return str;
 	}
 
-	public Tab getById(int id) {
-		for (Tab tab : this) {
-			if (tab.hashCode() == id)
-				return tab;
+	public Note getById(int id) {
+		for (Note note : this) {
+			if (note.hashCode() == id)
+				return note;
 		}
 		return null;
 	}

@@ -2,6 +2,7 @@ package planner.internal.item;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Agenda implements Serializable {
@@ -18,12 +19,12 @@ public class Agenda implements Serializable {
 
 	public void addEvent(Event event) {
 		events.add(event);
-		events.sort(null);
+		Collections.sort(events);
 	}
 
 	public void addTask(Task task) {
 		tasks.add(task);
-		tasks.sort(null);
+		Collections.sort(tasks);
 	}
 
 	public void remove(Item item) {

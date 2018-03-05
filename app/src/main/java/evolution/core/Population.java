@@ -1,6 +1,7 @@
 package evolution.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 public class Population extends ArrayList<Genome> {
@@ -40,7 +41,7 @@ public class Population extends ArrayList<Genome> {
 
 	// Sorted from high score to low
 	public void sort() {
-		super.sort(new Comparator<Genome>() {
+		Collections.sort(this, new Comparator<Genome>() {
 
 			@Override
 			public int compare(Genome o1, Genome o2) {

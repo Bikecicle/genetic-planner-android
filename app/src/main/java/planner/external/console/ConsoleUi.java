@@ -11,7 +11,7 @@ import planner.internal.core.C;
 import planner.internal.core.PlanningAssistant;
 import planner.internal.data.FileSystem;
 import planner.internal.item.Event;
-import planner.internal.item.Tab;
+import planner.internal.item.Note;
 import planner.internal.item.Task;
 import planner.internal.recurrence.Marker;
 import planner.internal.recurrence.Recurrence;
@@ -76,20 +76,20 @@ public class ConsoleUi {
 	}
 
 	private void editView() {
-		System.out.println("All tabs:");
-		List<Tab> tabs = planningAssistant.getAll();
-		for (Tab tab : tabs) {
-			System.out.println(tab);
+		System.out.println("All notes:");
+		List<Note> notes = planningAssistant.getAll();
+		for (Note note : notes) {
+			System.out.println(note);
 		}
 		System.out.println("Enter id:");
 		int id = in.nextInt();
 		in.nextLine();
-		Tab tab = planningAssistant.getById(id);
-		System.out.println(tab);
+		Note note = planningAssistant.getById(id);
+		System.out.println(note);
 		System.out.println("Actions: delete parent, menu");
 		String action = in.nextLine();
 		if (action.equals("delete parent")) {
-			planningAssistant.deleteItem(tab.getParent());
+			planningAssistant.deleteItem(note.getParent());
 			planningAssistant.planSchedule();
 			System.out.println("Parent removed");
 			menu();
@@ -102,18 +102,18 @@ public class ConsoleUi {
 	}
 
 	private void focusView() {
-		Tab tab = planningAssistant.getFirst();
-		if (tab == null) {
+		Note note = planningAssistant.getFirst();
+		if (note == null) {
 			System.out.println("Looks like you've got nothing to do!");
 			menu();
 		} else {
 			System.out.println("Here's what's up next:");
-			System.out.println(tab);
+			System.out.println(note);
 			System.out.println("Actions: complete, reschedule, menu");
 			String action = in.nextLine();
 			if (action.equals("complete")) {
-				tab.complete();
-				planningAssistant.removeTab(tab);
+				note.complete();
+				planningAssistant.removeTab(note);
 				focusView();
 			} else if (action.equals("reschedule")) {
 				planningAssistant.planSchedule();
@@ -127,13 +127,13 @@ public class ConsoleUi {
 	}
 
 	private void dayView() {
-		List<Tab> tabs = planningAssistant.getDay(current);
+		List<Note> notes = planningAssistant.getDay(current);
 		System.out.println("To do on day of " + current.getTime() + ":");
-		if (tabs.isEmpty()) {
+		if (notes.isEmpty()) {
 			System.out.println("Nothing at all!");
 		} else {
-			for (Tab tab : tabs) {
-				System.out.println(tab);
+			for (Note note : notes) {
+				System.out.println(note);
 			}
 		}
 		System.out.println("Actions: next, previous, menu");
@@ -152,13 +152,13 @@ public class ConsoleUi {
 	}
 
 	private void weekView() {
-		List<Tab> tabs = planningAssistant.getWeek(current);
+		List<Note> notes = planningAssistant.getWeek(current);
 		System.out.println("To do during week of " + current.getTime() + ":");
-		if (tabs.isEmpty()) {
+		if (notes.isEmpty()) {
 			System.out.println("Nothing at all!");
 		} else {
-			for (Tab tab : tabs) {
-				System.out.println(tab);
+			for (Note note : notes) {
+				System.out.println(note);
 			}
 		}
 		System.out.println("Actions: next, previous, menu:");
@@ -177,13 +177,13 @@ public class ConsoleUi {
 	}
 
 	private void monthView() {
-		List<Tab> tabs = planningAssistant.getMonth(current);
+		List<Note> notes = planningAssistant.getMonth(current);
 		System.out.println("To do during month of " + current.getTime() + ":");
-		if (tabs.isEmpty()) {
+		if (notes.isEmpty()) {
 			System.out.println("Nothing at all!");
 		} else {
-			for (Tab tab : tabs) {
-				System.out.println(tab);
+			for (Note note : notes) {
+				System.out.println(note);
 			}
 		}
 		System.out.println("Actions: next, previous, menu:");

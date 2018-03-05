@@ -39,24 +39,24 @@ public class Event extends Item implements Comparable<Event> {
 	}
 
 	@Override
-	public List<Tab> generateTabs(long[] gene) {
-		ArrayList<Tab> newTabs = new ArrayList<Tab>();
+	public List<Note> generateTabs(long[] gene) {
+		ArrayList<Note> newNotes = new ArrayList<Note>();
 		if (!complete) {
 			if (!recurring) {
-				newTabs.add(new Tab(title, details, start, duration, this));
+				newNotes.add(new Note(title, details, start, duration, this));
 			} else {
 				List<Long> instances = recurrence.getInstances(start, end);
 				for (long instance : instances) {
-					newTabs.add(new Tab(title, details, instance, duration, this));
+					newNotes.add(new Note(title, details, instance, duration, this));
 				}
 			}
-			tabs.addAll(newTabs);
+			notes.addAll(newNotes);
 		}
-		return newTabs;
+		return newNotes;
 	}
 
 	@Override
-	public void complete(Tab tab) {
+	public void complete(Note note) {
 		if (recurring) {
 			List<Long> instances = recurrence.getInstances(start, end);
 			if (instances.size() == 1) {
@@ -67,7 +67,7 @@ public class Event extends Item implements Comparable<Event> {
 		} else {
 			complete = true;
 		}
-		tabs.remove(tab);
+		notes.remove(note);
 	}
 
 	@Override

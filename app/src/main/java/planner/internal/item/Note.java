@@ -6,7 +6,7 @@ import java.util.Calendar;
 
 import planner.internal.core.C;
 
-public class Tab implements Comparable<Tab>, Serializable {
+public class Note implements Comparable<Note>, Serializable {
 
 	private static final long serialVersionUID = 5710812068584817767L;
 	private String title;
@@ -15,7 +15,7 @@ public class Tab implements Comparable<Tab>, Serializable {
 	private long duration;
 	private Item parent;
 
-	public Tab(String title, String details, long start, long duration, Item parent) {
+	public Note(String title, String details, long start, long duration, Item parent) {
 		this.title = title;
 		this.details = details;
 		this.start = start;
@@ -23,7 +23,7 @@ public class Tab implements Comparable<Tab>, Serializable {
 		this.parent = parent;
 	}
 
-	public Tab(long start, long duration) {
+	public Note(long start, long duration) {
 		title = null;
 		details = null;
 		this.start = start;
@@ -36,7 +36,7 @@ public class Tab implements Comparable<Tab>, Serializable {
 	}
 
 	@Override
-	public int compareTo(Tab other) {
+	public int compareTo(Note other) {
 		return (int) Math.signum(this.start - other.getStart());
 	}
 

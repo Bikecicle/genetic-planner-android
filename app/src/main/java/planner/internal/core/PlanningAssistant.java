@@ -9,8 +9,8 @@ import planner.internal.data.DataManager;
 import planner.internal.item.Agenda;
 import planner.internal.item.Event;
 import planner.internal.item.Item;
+import planner.internal.item.Note;
 import planner.internal.item.Schedule;
-import planner.internal.item.Tab;
 import planner.internal.item.Task;
 
 public class PlanningAssistant {
@@ -77,23 +77,23 @@ public class PlanningAssistant {
         schedule = currentGenome.generateSchedule();
     }
 
-    public Tab getFirst() {
+    public Note getFirst() {
         return schedule.iterator().next();
     }
 
-    public List<Tab> getDay(Calendar day) {
+    public List<Note> getDay(Calendar day) {
         return schedule.getDay(day);
     }
 
-    public List<Tab> getWeek(Calendar week) {
+    public List<Note> getWeek(Calendar week) {
         return schedule.getWeek(week);
     }
 
-    public List<Tab> getMonth(Calendar month) {
+    public List<Note> getMonth(Calendar month) {
         return schedule.getMonth(month);
     }
 
-    public List<Tab> getAll() {
+    public List<Note> getAll() {
         return schedule.getAll();
     }
 
@@ -105,8 +105,8 @@ public class PlanningAssistant {
         agenda.addTask(newTask);
     }
 
-    public void removeTab(Tab tab) {
-        schedule.remove(tab);
+    public void removeTab(Note note) {
+        schedule.remove(note);
     }
 
     public void clean() {
@@ -122,7 +122,7 @@ public class PlanningAssistant {
         return schedule;
     }
 
-    public Tab getById(int id) {
+    public Note getById(int id) {
         return schedule.getById(id);
     }
 

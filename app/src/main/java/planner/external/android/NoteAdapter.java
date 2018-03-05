@@ -10,18 +10,17 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import planner.internal.core.C;
-import planner.internal.item.Tab;
+import planner.internal.item.Note;
 
 /**
  * Created by Griffin on 3/1/2018.
  */
 
-public class TabAdapter extends ArrayAdapter<Tab> {
+public class NoteAdapter extends ArrayAdapter<Note> {
 
     private String dtFormat;
 
-    public TabAdapter(Context context, List<Tab> data, String dtFormat) {
+    public NoteAdapter(Context context, List<Note> data, String dtFormat) {
         super(context, 0, data);
         this.dtFormat = dtFormat;
     }
@@ -29,17 +28,17 @@ public class TabAdapter extends ArrayAdapter<Tab> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tab, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_note, parent, false);
 
-        Tab tab = getItem(position);
+        Note note = getItem(position);
 
         TextView tvStart = convertView.findViewById(R.id.tvStart);
         TextView tvTitle = convertView.findViewById(R.id.tvTitle);
         TextView tvDetails = convertView.findViewById(R.id.tvDetails);
 
-        tvStart.setText(new SimpleDateFormat(dtFormat).format(tab.getStartDate().getTime()));
-        tvTitle.setText(tab.getTitle());
-        tvDetails.setText(tab.getDetails());
+        tvStart.setText(new SimpleDateFormat(dtFormat).format(note.getStartDate().getTime()));
+        tvTitle.setText(note.getTitle());
+        tvDetails.setText(note.getDetails());
 
         return convertView;
     }

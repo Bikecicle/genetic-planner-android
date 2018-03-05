@@ -13,6 +13,8 @@ public class C {
 	public static final String DATE_TIME_FORMAT = "MM/dd/yyyy HH:mm";
 	public static final String DAY_FORMAT = "MM/dd/yyyy";
 	public static final String TIME_FORMAT = "HH:mm";
+	public static final String MONTH_FORMAT = "MM/yyyy";
+	public static final String YEAR_FORMAT = "yyyy";
 	
 	// Schedule evolution parameters
 	public static final int POPULATION_SIZE = 10;

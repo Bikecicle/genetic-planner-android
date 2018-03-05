@@ -6,7 +6,7 @@ import evolution.core.Genome;
 import planner.internal.item.Agenda;
 import planner.internal.item.Event;
 import planner.internal.item.Schedule;
-import planner.internal.item.Tab;
+import planner.internal.item.Note;
 import planner.internal.item.Task;
 
 public class ScheduleGenome implements Genome {
@@ -79,10 +79,10 @@ public class ScheduleGenome implements Genome {
 
 		// Separation
 		long prevStart = 0;
-		for (Tab tab : schedule) {
+		for (Note note : schedule) {
 			// Lower score the closer together things are scheduled (within a
 			// day)
-			long delta = tab.getStart() - prevStart;
+			long delta = note.getStart() - prevStart;
 			if (delta < C.DAY)
 				score -= (C.DAY - delta) * C.SEPARATION_CF;
 		}
