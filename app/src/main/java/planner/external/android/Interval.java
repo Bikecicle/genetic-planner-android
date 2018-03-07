@@ -15,10 +15,10 @@ public enum Interval implements Serializable {
     month("Month", C.MONTH_FORMAT, C.DATE_TIME_FORMAT),
     year("Year", C.YEAR_FORMAT, C.DATE_TIME_FORMAT);
 
-    int tPosition; // Tab position;
-    String fTitle; // Fragment title
-    String iFormat; // Interval display format
-    String lFormat; // Listed note date/time format
+    public int tPosition; // Tab position;
+    public String fTitle; // Fragment title
+    public String iFormat; // Interval display format
+    public String lFormat; // Listed note date/time format
 
     Interval(String fTitle, String iFormat, String lFormat) {
         this.fTitle = fTitle;

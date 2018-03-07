@@ -28,13 +28,13 @@ public class NoteAdapter extends ArrayAdapter<Note> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_note, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.note, parent, false);
 
         Note note = getItem(position);
 
-        TextView tvStart = convertView.findViewById(R.id.tvStart);
-        TextView tvTitle = convertView.findViewById(R.id.tvTitle);
-        TextView tvDetails = convertView.findViewById(R.id.tvDetails);
+        TextView tvStart = convertView.findViewById(R.id.note_start);
+        TextView tvTitle = convertView.findViewById(R.id.note_title);
+        TextView tvDetails = convertView.findViewById(R.id.note_details);
 
         tvStart.setText(new SimpleDateFormat(dtFormat).format(note.getStartDate().getTime()));
         tvTitle.setText(note.getTitle());

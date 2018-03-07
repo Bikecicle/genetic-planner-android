@@ -77,15 +77,15 @@ public class NoteListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView tvTitle = getView().findViewById(R.id.title_display);
+        TextView tvTitle = getView().findViewById(R.id.note_fragment_title);
         tvTitle.setText(interval.fTitle);
 
-        TextView tvInterest = getView().findViewById(R.id.interest_display);
+        TextView tvInterest = getView().findViewById(R.id.note_fragment_interest);
         tvInterest.setText(new SimpleDateFormat(interval.iFormat).format(interest.getTime()));
 
         List<Note> notes = planningAssistant.getDay(interest);
         NoteAdapter adapter = new NoteAdapter(this.getContext(), notes, interval.lFormat);
-        ListView lvTabs = getView().findViewById(R.id.note_list);
+        ListView lvTabs = getView().findViewById(R.id.note_fragment_list);
         lvTabs.setAdapter(adapter);
     }
 

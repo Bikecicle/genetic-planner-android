@@ -87,5 +87,13 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="action_reschedule">Reschedule</string>
+    <string name="title_activity_add_item">AddItemActivity</string>
+    <string name="item_type">Item Type</string>
+    <string name="title">Title</string>
+    <string name="date_time">Date/Time</string>
+    <string name="details">Details</string>
+    <string name="duration">Duration</string>
+    <string name="time_colon">:</string>
+    <string name="add">Add</string>
 
 </resources>
