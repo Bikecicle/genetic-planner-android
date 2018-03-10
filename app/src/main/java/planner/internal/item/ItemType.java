@@ -6,10 +6,10 @@ package planner.internal.item;
 
 public enum ItemType {
 
-    event("Event", "Start Date"),
+    event("Event", "Start Date/Time"),
     task("Task", "Deadline"),
-    routine("Routine", "Start Date"),
-    quota("Quota", "Start Date");
+    routine("Routine", "Start Date/Time"),
+    quota("Quota", "Start Date/Time");
 
     public String name;
     public String dateName;
