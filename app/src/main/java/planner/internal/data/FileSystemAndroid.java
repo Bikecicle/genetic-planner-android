@@ -9,14 +9,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Calendar;
+import java.util.List;
 
 import planner.internal.core.ScheduleGenome;
 import planner.internal.item.Agenda;
+import planner.internal.item.Event;
+import planner.internal.item.Item;
+import planner.internal.item.Note;
+import planner.internal.item.Schedule;
+import planner.internal.item.Task;
 
-public class FileSystemAndroid implements DataManager {
+public class FileSystemAndroid extends FileSystem {
 
     private final String agendaFile = "agenda";
-    private final String genomeFile = "scheduleGenome";
 
     private Context context;
 
@@ -25,57 +31,34 @@ public class FileSystemAndroid implements DataManager {
     }
 
     @Override
-    public boolean saveAgenda(Agenda agenda) {
+    public boolean load() {
+        if (isExternalStorageReadable()) {
+            try {
+                ObjectInputStream in = new ObjectInputStream(new FileInputStream(getExternalFile(agendaFile)));
+                agenda = (Agenda) in.readObject();
+                in.close();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        schedule = agenda.extractSchedule();
+        return true;
+    }
+
+    @Override
+    public boolean save() {
         if (isExternalStorageWritable()) {
             try {
                 ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(getExternalFile(agendaFile)));
                 out.writeObject(agenda);
+                out.close();
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         return false;
-    }
-
-    @Override
-    public Agenda loadAgenda() {
-        if (isExternalStorageReadable()) {
-            try {
-                ObjectInputStream in = new ObjectInputStream(new FileInputStream(getExternalFile(agendaFile)));
-                return (Agenda) in.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public boolean saveScheduleGenome(ScheduleGenome scheduleGenome) {
-        if (isExternalStorageWritable()) {
-            try {
-                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(getExternalFile(genomeFile)));
-                out.writeObject(scheduleGenome);
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public ScheduleGenome loadScheduleGenome() {
-        if (isExternalStorageReadable()) {
-            try {
-                ObjectInputStream in = new ObjectInputStream(new FileInputStream(getExternalFile(genomeFile)));
-                return (ScheduleGenome) in.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 
     /* Checks if external storage is available for read and write */

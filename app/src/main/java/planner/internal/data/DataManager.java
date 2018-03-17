@@ -1,7 +1,15 @@
 package planner.internal.data;
 
+import java.util.Calendar;
+import java.util.List;
+
 import planner.internal.core.ScheduleGenome;
 import planner.internal.item.Agenda;
+import planner.internal.item.Event;
+import planner.internal.item.Item;
+import planner.internal.item.Note;
+import planner.internal.item.Schedule;
+import planner.internal.item.Task;
 
 /**
  * Created by Griffin on 8/11/2017.
@@ -9,12 +17,35 @@ import planner.internal.item.Agenda;
 
 public interface DataManager {
 
-    boolean saveAgenda(Agenda agenda);
+    boolean load();
 
-    Agenda loadAgenda();
+    boolean save();
 
-    boolean saveScheduleGenome(ScheduleGenome scheduleGenome);
+    void clean();
 
-    ScheduleGenome loadScheduleGenome();
+    Agenda getAgenda();
 
+    void cleanAgenda();
+
+    void addItem(Item item);
+
+    void removeItem(Item item);
+
+    Schedule getSchedule();
+
+    void setSchedule(Schedule schedule);
+
+    Note getFirst();
+
+    List<Note> getDay(Calendar day);
+
+    List<Note> getWeek(Calendar week);
+
+    List<Note> getMonth(Calendar month);
+
+    List<Note> getAll();
+
+    void removeNote(Note note);
+
+    Note getNoteById(int id);
 }

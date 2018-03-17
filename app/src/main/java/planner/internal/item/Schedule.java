@@ -6,9 +6,10 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
-public class Schedule implements Iterable<Note>, Serializable{
+public class Schedule implements Iterable<Note>, Serializable {
 
 	private static final long serialVersionUID = -3734613331222933635L;
+
 	private Node head;
 	private int size;
 
@@ -156,6 +157,7 @@ public class Schedule implements Iterable<Note>, Serializable{
 	public boolean isEmpty() {
 		return head.next == null;
 	}
+
 
 	@Override
 	public Iterator<Note> iterator() {

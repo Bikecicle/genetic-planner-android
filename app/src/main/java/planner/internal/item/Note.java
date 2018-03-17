@@ -1,5 +1,10 @@
 package planner.internal.item;
 
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -9,11 +14,13 @@ import planner.internal.core.C;
 public class Note implements Comparable<Note>, Serializable {
 
 	private static final long serialVersionUID = 5710812068584817767L;
-	private String title;
-	private String details;
-	private long start;
-	private long duration;
-	private Item parent;
+
+	public String title;
+	public String details;
+	public long start;
+	public long duration;
+
+	public Item parent;
 
 	public Note(String title, String details, long start, long duration, Item parent) {
 		this.title = title;
@@ -37,7 +44,7 @@ public class Note implements Comparable<Note>, Serializable {
 
 	@Override
 	public int compareTo(Note other) {
-		return (int) Math.signum(this.start - other.getStart());
+		return (int) Math.signum(this.start - other.start);
 	}
 
 	@Override
@@ -62,30 +69,10 @@ public class Note implements Comparable<Note>, Serializable {
 		return cal;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public String getDetails() {
-		return details;
-	}
-
-	public long getStart() {
-		return start;
-	}
-
-	public long getDuration() {
-		return duration;
-	}
-
 	public long getEnd() {
 		return start + duration;
 	}
 
-	public Item getParent() {
-		return parent;
-	}
-	
 	public int getId() {
 		return hashCode();
 	}

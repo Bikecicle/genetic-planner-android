@@ -57,14 +57,14 @@ public class ScheduleGenome implements Genome {
 
 		// Add in events
 		for (Event event : agenda.events) {
-			schedule.addAll(event.generateTabs(null));
+			schedule.addAll(event.generateNotes(null));
 		}
 
 		// Conflicts
 		int pass = 0;
 		for (int i = 0; i < taskGenome.length; i++) {
 			// Higher score for more successful additions
-			pass += schedule.addAll(agenda.tasks.get(i).generateTabs(taskGenome[i]));
+			pass += schedule.addAll(agenda.tasks.get(i).generateNotes(taskGenome[i]));
 		}
 		score += pass * C.CONFLICT_CF;
 
@@ -132,10 +132,10 @@ public class ScheduleGenome implements Genome {
 	public Schedule generateSchedule() {
 		Schedule schedule = new Schedule();
 		for (Event event : agenda.events) {
-			schedule.addAll(event.generateTabs(null));
+			schedule.addAll(event.generateNotes(null));
 		}
 		for (int i = 0; i < taskGenome.length; i++) {
-			schedule.addAll(agenda.tasks.get(i).generateTabs(taskGenome[i]));
+			schedule.addAll(agenda.tasks.get(i).generateNotes(taskGenome[i]));
 		}
 		return schedule;
 	}

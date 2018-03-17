@@ -18,116 +18,87 @@ public class PlanningAssistant {
     private static PlanningAssistant planningAssistant;
 
     private DataManager dataManager;
-    private Agenda agenda;
-    private ScheduleGenome currentGenome;
-    private Schedule schedule;
 
-    public PlanningAssistant() {
-        agenda = new Agenda();
-        schedule = new Schedule();
-    }
-
-    public static PlanningAssistant getInstance() {
-        if (planningAssistant == null)
-            planningAssistant = new PlanningAssistant();
-        return planningAssistant;
-    }
-
-    public void setDataManager(DataManager dataManager) {
+    public PlanningAssistant(DataManager dataManager) {
         this.dataManager = dataManager;
     }
 
-    public void load() {
-        if (dataManager != null) {
-            agenda = dataManager.loadAgenda();
-            if (agenda != null) {
-                currentGenome = dataManager.loadScheduleGenome();
-                if (currentGenome != null) {
-                    currentGenome.setAgenda(agenda);
-                    schedule = currentGenome.generateSchedule();
-                } else {
-                    schedule = new Schedule();
-                }
+    public static PlanningAssistant getInstance(DataManager dataManager) {
+        if (planningAssistant == null)
+            planningAssistant = new PlanningAssistant(dataManager);
+        return planningAssistant;
+    }
 
-            } else {
-                agenda = new Agenda();
-                schedule = new Schedule();
-            }
-        }
+    public void load() {
+        dataManager.load();
     }
 
     public void save() {
-        if (dataManager != null) {
-            agenda.clean();
-            dataManager.saveAgenda(agenda);
-            dataManager.saveScheduleGenome(currentGenome);
-        }
+        dataManager.save();
     }
 
     public void planSchedule() {
-        agenda.clean();
+        dataManager.cleanAgenda();
         Population initialPopulation = new Population();
         for (int i = 0; i < C.POPULATION_SIZE; i++) {
-            initialPopulation.add(new ScheduleGenome(agenda, C.MUTATION_RATE));
+            initialPopulation.add(new ScheduleGenome(dataManager.getAgenda(), C.MUTATION_RATE));
         }
         EvolutionManager evolutionManager = new EvolutionManager(initialPopulation, C.SELECTOR, true);
         evolutionManager.runGenerations(C.GENERATION_COUNT);
         evolutionManager.saveLog(C.logFile);
-        currentGenome = (ScheduleGenome) evolutionManager.getResult();
-        schedule = currentGenome.generateSchedule();
+        dataManager.setSchedule(((ScheduleGenome) evolutionManager.getResult()).generateSchedule());
     }
 
     public Note getFirst() {
-        return schedule.iterator().next();
+        return dataManager.getFirst();
     }
 
     public List<Note> getDay(Calendar day) {
-        return schedule.getDay(day);
+        return dataManager.getDay(day);
     }
 
     public List<Note> getWeek(Calendar week) {
-        return schedule.getWeek(week);
+        return dataManager.getWeek(week);
     }
 
     public List<Note> getMonth(Calendar month) {
-        return schedule.getMonth(month);
+        return dataManager.getMonth(month);
     }
 
     public List<Note> getAll() {
-        return schedule.getAll();
+        return dataManager.getAll();
     }
 
     public void addEvent(Event newEvent) {
-        agenda.addEvent(newEvent);
+        dataManager.addEvent(newEvent);
     }
 
     public void addTask(Task newTask) {
-        agenda.addTask(newTask);
+        dataManager.addTask(newTask);
     }
 
-    public void removeTab(Note note) {
-        schedule.remove(note);
+    public void removeNote(Note note) {
+        dataManager.removeNote(note);
     }
 
     public void clean() {
-        agenda = new Agenda();
-        schedule = new Schedule();
+        dataManager.clean();
     }
 
     public Agenda getAgenda() {
-        return agenda;
+        return dataManager.getAgenda();
     }
 
     public Schedule getSchedule() {
-        return schedule;
+        return dataManager.getSchedule();
     }
 
-    public Note getById(int id) {
-        return schedule.getById(id);
+    public Note getNoteById(int id) {
+        return dataManager.getNoteById(id);
     }
 
     public void deleteItem(Item parent) {
         parent.clean();
-        agenda.remove(parent);
+        dataManager.removeItem(parent);
     }
 }

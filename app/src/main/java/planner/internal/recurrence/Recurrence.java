@@ -3,23 +3,23 @@ package planner.internal.recurrence;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Recurrence implements Serializable {
 
 	private static final long serialVersionUID = -3994701701484893544L;
 	public int scale;
 	public int period;
-	public List<Marker> markers;
+	public ArrayList<Marker> markers;
 
-	public Recurrence(int scale, int period, List<Marker> markers) {
+	public Recurrence(int scale, int period, ArrayList<Marker> markers) {
 		this.scale = scale;
 		this.period = period;
 		this.markers = markers;
 	}
 
-	public List<Long> getInstances(long start, long end) {
-		List<Long> instances = new ArrayList<Long>();
+	public ArrayList<Long> getInstances(long start, long end) {
+		ArrayList<Long> instances = new ArrayList<Long>();
 		long current = start;
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(current);

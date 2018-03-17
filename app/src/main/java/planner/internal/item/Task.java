@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.ArrayList;
 
 import planner.internal.core.C;
 
@@ -17,7 +17,7 @@ public class Task extends Item implements Comparable<Task> {
 	private long planned;
 
 	public Task(String title, String details, long deadline, long duration) {
-		super(title, details);
+		super(ItemType.task, title, details);
 		this.deadline = deadline;
 		this.duration = duration;
 		this.complete = 0;
@@ -25,7 +25,7 @@ public class Task extends Item implements Comparable<Task> {
 	}
 
 	public Task(String title, String details, String deadlineDate, int minutes) {
-		super(title, details);
+		super(ItemType.task, title, details);
 		Calendar c = Calendar.getInstance();
 		try {
 			c.setTime(new SimpleDateFormat(C.DATE_TIME_FORMAT).parse(deadlineDate));
@@ -40,8 +40,8 @@ public class Task extends Item implements Comparable<Task> {
 	}
 
 	@Override
-	public List<Note> generateTabs(long[] genome) {
-		List<Note> newNotes = new ArrayList<Note>();
+	public ArrayList<Note> generateNotes(long[] genome) {
+		ArrayList<Note> newNotes = new ArrayList<Note>();
 		for (int i = 0; i < genome.length; i++) {
 			long tabDuration = 0;
 			if (getRemaining() > C.HOUR) {

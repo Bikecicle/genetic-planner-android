@@ -42,7 +42,7 @@ public class Quota extends Item implements Comparable<Quota> {
 	}
 
 	@Override
-	public List<Note> generateTabs(long[] genome) {
+	public List<Note> generateNotes(long[] genome) {
 		List<Note> newNotes = new ArrayList<Note>();
 		for (int i = 0; i < genome.length; i++) {
 			long tabDuration = 0;

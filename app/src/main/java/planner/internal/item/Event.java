@@ -3,7 +3,7 @@ package planner.internal.item;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.ArrayList;
 
 import planner.internal.core.C;
 import planner.internal.recurrence.Recurrence;
@@ -19,7 +19,7 @@ public class Event extends Item implements Comparable<Event> {
 	private Recurrence recurrence;
 
 	public Event(String title, String details, long start, long duration) {
-		super(title, details);
+		super(ItemType.event, title, details);
 		this.start = start;
 		this.duration = duration;
 		complete = false;
@@ -28,7 +28,7 @@ public class Event extends Item implements Comparable<Event> {
 	}
 
 	public Event(String title, String details, long start, long duration, Recurrence recurrence, long end) {
-		super(title, details);
+		super(ItemType.event, title, details);
 		this.start = start;
 		this.duration = duration;
 		if (recurrence != null) {
@@ -39,13 +39,13 @@ public class Event extends Item implements Comparable<Event> {
 	}
 
 	@Override
-	public List<Note> generateTabs(long[] gene) {
+	public ArrayList<Note> generateNotes(long[] gene) {
 		ArrayList<Note> newNotes = new ArrayList<Note>();
 		if (!complete) {
 			if (!recurring) {
 				newNotes.add(new Note(title, details, start, duration, this));
 			} else {
-				List<Long> instances = recurrence.getInstances(start, end);
+				ArrayList<Long> instances = recurrence.getInstances(start, end);
 				for (long instance : instances) {
 					newNotes.add(new Note(title, details, instance, duration, this));
 				}
@@ -58,7 +58,7 @@ public class Event extends Item implements Comparable<Event> {
 	@Override
 	public void complete(Note note) {
 		if (recurring) {
-			List<Long> instances = recurrence.getInstances(start, end);
+			ArrayList<Long> instances = recurrence.getInstances(start, end);
 			if (instances.size() == 1) {
 				complete = true;
 			} else {

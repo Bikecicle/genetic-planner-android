@@ -3,28 +3,28 @@ package planner.internal.item;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Agenda implements Serializable {
 
 	private static final long serialVersionUID = 8095770957990266696L;
 	// These lists will remain sorted chronologically (not that it matters)
-	public List<Event> events;
-	public List<Task> tasks;
+	public ArrayList<Event> events;
+	public ArrayList<Task> tasks;
 
 	public Agenda() {
 		events = new ArrayList<Event>();
 		tasks = new ArrayList<Task>();
 	}
 
-	public void addEvent(Event event) {
-		events.add(event);
-		Collections.sort(events);
-	}
-
-	public void addTask(Task task) {
-		tasks.add(task);
-		Collections.sort(tasks);
+	public void add(Item item) {
+		if (item.type == ItemType.event) {
+			events.add((Event) item);
+			Collections.sort(events);
+		} else if (item.type == ItemType.task) {
+			tasks.add((Task) item);
+			Collections.sort(tasks);
+		}
 	}
 
 	public void remove(Item item) {
@@ -39,6 +39,14 @@ public class Agenda implements Serializable {
 		for (Task task : tasks) {
 			task.clean();
 		}
+	}
+
+	public Schedule extractSchedule() {
+		Schedule schedule = new Schedule();
+		for (Event event : events) {
+			schedule.addAll(event.notes);
+		}
+		return schedule;
 	}
 
 	public String toString() {
