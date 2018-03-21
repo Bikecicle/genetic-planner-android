@@ -41,9 +41,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PlanningAssistant planningAssistant;
-        planningAssistant = PlanningAssistant.getInstance();
-        planningAssistant.setDataManager(new FileSystemAndroid(this));
+        PlanningAssistant planningAssistant = PlanningAssistant.getInstance(new FileSystemAndroid(this));
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);

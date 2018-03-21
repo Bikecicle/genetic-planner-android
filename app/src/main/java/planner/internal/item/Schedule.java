@@ -38,7 +38,7 @@ public class Schedule implements Iterable<Note>, Serializable {
 		while (temp.next != null && temp.next.note.compareTo(newNote) < 0)
 			temp = temp.next;
 		// Check if the note overlaps with the previous
-		if (temp.note.getEnd() > newNote.getStart())
+		if (temp.note.getEnd() > newNote.start)
 			return false;
 		// Add to end
 		if (temp.next == null) {
@@ -47,7 +47,7 @@ public class Schedule implements Iterable<Note>, Serializable {
 			return true;
 		}
 		// Check if the new note overlaps with the next one
-		if (newNote.getEnd() > temp.next.note.getStart())
+		if (newNote.getEnd() > temp.next.note.start)
 			return false;
 		// Add the new note at the proper time
 		temp.next = new Node(newNote, temp.next);

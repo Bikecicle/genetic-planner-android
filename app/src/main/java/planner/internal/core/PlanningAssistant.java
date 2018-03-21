@@ -7,25 +7,31 @@ import evolution.core.EvolutionManager;
 import evolution.core.Population;
 import planner.internal.data.DataManager;
 import planner.internal.item.Agenda;
-import planner.internal.item.Event;
 import planner.internal.item.Item;
 import planner.internal.item.Note;
 import planner.internal.item.Schedule;
-import planner.internal.item.Task;
 
 public class PlanningAssistant {
 
     private static PlanningAssistant planningAssistant;
 
+    private final boolean loggingEnabled = false;
+
     private DataManager dataManager;
 
-    public PlanningAssistant(DataManager dataManager) {
+    PlanningAssistant(DataManager dataManager) {
         this.dataManager = dataManager;
+        dataManager.load();
     }
 
     public static PlanningAssistant getInstance(DataManager dataManager) {
-        if (planningAssistant == null)
+        if (planningAssistant == null) {
             planningAssistant = new PlanningAssistant(dataManager);
+        }
+        return planningAssistant;
+    }
+
+    public static PlanningAssistant getInstance() {
         return planningAssistant;
     }
 
@@ -43,9 +49,10 @@ public class PlanningAssistant {
         for (int i = 0; i < C.POPULATION_SIZE; i++) {
             initialPopulation.add(new ScheduleGenome(dataManager.getAgenda(), C.MUTATION_RATE));
         }
-        EvolutionManager evolutionManager = new EvolutionManager(initialPopulation, C.SELECTOR, true);
+        EvolutionManager evolutionManager = new EvolutionManager(initialPopulation, C.SELECTOR, loggingEnabled);
         evolutionManager.runGenerations(C.GENERATION_COUNT);
-        evolutionManager.saveLog(C.logFile);
+        if (loggingEnabled)
+            evolutionManager.saveLog(C.logFile);
         dataManager.setSchedule(((ScheduleGenome) evolutionManager.getResult()).generateSchedule());
     }
 
@@ -69,12 +76,8 @@ public class PlanningAssistant {
         return dataManager.getAll();
     }
 
-    public void addEvent(Event newEvent) {
-        dataManager.addEvent(newEvent);
-    }
-
-    public void addTask(Task newTask) {
-        dataManager.addTask(newTask);
+    public void addItem(Item item) {
+        dataManager.addItem(item);
     }
 
     public void removeNote(Note note) {
@@ -100,5 +103,9 @@ public class PlanningAssistant {
     public void deleteItem(Item parent) {
         parent.clean();
         dataManager.removeItem(parent);
+    }
+
+    DataManager getDataManager() {
+        return dataManager;
     }
 }

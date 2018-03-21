@@ -107,15 +107,17 @@ public class AddItemActivity extends AppCompatActivity {
                 String title = ((EditText) findViewById(R.id.add_title)).getText().toString();
                 String details = ((EditText) findViewById(R.id.add_details)).getText().toString();
 
+                Item item = null;
                 if (itemType == ItemType.event) {
-                    planningAssistant.addEvent(new Event(title, details, date.getTimeInMillis(), duration.getTimeInMillis()));
+                    item = new Event(title, details, date.getTimeInMillis(), duration.getTimeInMillis());
                 } else if (itemType == ItemType.task){
-                    planningAssistant.addTask(new Task(title, details, date.getTimeInMillis(), duration.getTimeInMillis()));
+                    item = new Task(title, details, date.getTimeInMillis(), duration.getTimeInMillis());
                 } else if (itemType == ItemType.routine) {
                     // TODO
                 } else if (itemType == ItemType.quota){
                     // TODO
                 }
+                planningAssistant.addItem(item);
                 planningAssistant.planSchedule();
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 startActivity(intent);

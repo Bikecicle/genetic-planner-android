@@ -19,7 +19,7 @@ public class Quota extends Item implements Comparable<Quota> {
 	private Recurrence recurrence;
 
 	public Quota(String title, String details, long deadline, long duration) {
-		super(title, details);
+		super(ItemType.quota, title, details);
 		this.deadline = deadline;
 		this.duration = duration;
 		this.complete = 0;
@@ -27,7 +27,7 @@ public class Quota extends Item implements Comparable<Quota> {
 	}
 
 	public Quota(String title, String details, String deadlineDate, int minutes) {
-		super(title, details);
+		super(ItemType.quota, title, details);
 		Calendar c = Calendar.getInstance();
 		try {
 			c.setTime(new SimpleDateFormat(C.DATE_TIME_FORMAT).parse(deadlineDate));
@@ -42,8 +42,8 @@ public class Quota extends Item implements Comparable<Quota> {
 	}
 
 	@Override
-	public List<Note> generateNotes(long[] genome) {
-		List<Note> newNotes = new ArrayList<Note>();
+	public ArrayList<Note> generateNotes(long[] genome) {
+		ArrayList<Note> newNotes = new ArrayList<Note>();
 		for (int i = 0; i < genome.length; i++) {
 			long tabDuration = 0;
 			if (getRemaining() > C.HOUR) {
@@ -61,8 +61,8 @@ public class Quota extends Item implements Comparable<Quota> {
 
 	@Override
 	public void complete(Note note) {
-		planned -= note.getDuration();
-		complete += note.getDuration();
+		planned -= note.duration;
+		complete += note.duration;
 		notes.remove(note);
 	}
 

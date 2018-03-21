@@ -8,7 +8,8 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 /**
- * Created by Griffin on 3/13/2018.
+ * Created by Griffin Page on 3/13/2018
+ * griffinpage9@gmail.com
  */
 
 @Dao

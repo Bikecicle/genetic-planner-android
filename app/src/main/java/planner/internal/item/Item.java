@@ -8,6 +8,7 @@ public abstract class Item implements Serializable {
 	
 	private static final long serialVersionUID = -7943195019888260373L;
 
+	public int id;
 	public ItemType type;
 	public String title;
 	public String details;
@@ -18,6 +19,7 @@ public abstract class Item implements Serializable {
 		this.type = type;
 		this.title = title;
 		this.details = details;
+		id = hashCode();
 		this.notes = new ArrayList<Note>();
 	}
 	
@@ -28,6 +30,4 @@ public abstract class Item implements Serializable {
 	public void clean() {
 		notes.clear();
 	}
-
-	public int getId() { return hashCode(); }
 }

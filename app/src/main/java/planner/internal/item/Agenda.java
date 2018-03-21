@@ -70,7 +70,29 @@ public class Agenda implements Serializable {
 		return s;
 	}
 
+	public boolean hasItem(Item item) {
+		if (item.type == ItemType.event) {
+			for (Event event : events) {
+				if (event.id == item.id) {
+					return true;
+				}
+			}
+		}
+		else if (item.type == ItemType.task) {
+			for (Task task : tasks) {
+				if (task.id == item.id) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public boolean isEmpty() {
 		return events.isEmpty() && tasks.isEmpty();
 	}
+
+    public int size() {
+		return events.size() + tasks.size();
+    }
 }

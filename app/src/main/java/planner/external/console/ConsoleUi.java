@@ -23,9 +23,9 @@ public class ConsoleUi {
 
 	private Calendar current;
 
+	/**
 	public ConsoleUi() {
-		planningAssistant = PlanningAssistant.getInstance();
-		planningAssistant.setDataManager(new FileSystem());
+		planningAssistant = PlanningAssistant.getInstance(new FileSystem());
 		in = new Scanner(System.in);
 		current = Calendar.getInstance();
 	}
@@ -327,4 +327,5 @@ public class ConsoleUi {
 		ConsoleUi ui = new ConsoleUi();
 		ui.focusView();
 	}
+	 */
 }

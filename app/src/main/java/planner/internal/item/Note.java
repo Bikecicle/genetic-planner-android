@@ -1,13 +1,11 @@
 package planner.internal.item;
 
-import android.arch.persistence.room.Embedded;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import planner.internal.core.C;
 
@@ -15,6 +13,7 @@ public class Note implements Comparable<Note>, Serializable {
 
 	private static final long serialVersionUID = 5710812068584817767L;
 
+	public int id;
 	public String title;
 	public String details;
 	public long start;
@@ -27,6 +26,7 @@ public class Note implements Comparable<Note>, Serializable {
 		this.details = details;
 		this.start = start;
 		this.duration = duration;
+		id = hashCode();
 		this.parent = parent;
 	}
 
@@ -43,17 +43,17 @@ public class Note implements Comparable<Note>, Serializable {
 	}
 
 	@Override
-	public int compareTo(Note other) {
+	public int compareTo(@NonNull Note other) {
 		return (int) Math.signum(this.start - other.start);
 	}
 
 	@Override
 	public String toString() {
-		SimpleDateFormat f = new SimpleDateFormat(C.DATE_TIME_FORMAT);
+		SimpleDateFormat f = new SimpleDateFormat(C.DATE_TIME_FORMAT, Locale.US);
 		String str = f.format(getStartDate().getTime()) + " - " + f.format(getEndDate().getTime()) + ": " + title;
 		if (details != null && !details.equals(""))
 			str += " - " + details;
-		str += " [" + getId() + "]";
+		str += " [" + id + "]";
 		return str;
 	}
 
@@ -63,7 +63,7 @@ public class Note implements Comparable<Note>, Serializable {
 		return cal;
 	}
 
-	public Calendar getEndDate() {
+	private Calendar getEndDate() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(start + duration);
 		return cal;
@@ -71,9 +71,5 @@ public class Note implements Comparable<Note>, Serializable {
 
 	public long getEnd() {
 		return start + duration;
-	}
-
-	public int getId() {
-		return hashCode();
 	}
 }

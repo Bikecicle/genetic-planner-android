@@ -37,8 +37,8 @@ public class NoteAdapter extends ArrayAdapter<Note> {
         TextView tvDetails = convertView.findViewById(R.id.note_details);
 
         tvStart.setText(new SimpleDateFormat(dtFormat).format(note.getStartDate().getTime()));
-        tvTitle.setText(note.getTitle());
-        tvDetails.setText(note.getDetails());
+        tvTitle.setText(note.title);
+        tvDetails.setText(note.details);
 
         return convertView;
     }

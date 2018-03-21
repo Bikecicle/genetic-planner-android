@@ -15,7 +15,7 @@ import planner.internal.item.Schedule;
 
 public class FileSystem implements DataManager {
 	
-	public final String agendaFile = "data/agenda";
+	public String agendaFile = "data/agenda";
 
 	protected Agenda agenda;
 	protected Schedule schedule;
@@ -88,18 +88,18 @@ public class FileSystem implements DataManager {
 	}
 
 	@Override
-	public List<Note> getDay(Calendar day) {
-		return schedule.getDay(day);
+	public List<Note> getDay(Calendar target) {
+		return schedule.getDay(target);
 	}
 
 	@Override
-	public List<Note> getWeek(Calendar week) {
-		return schedule.getWeek(week);
+	public List<Note> getWeek(Calendar target) {
+		return schedule.getWeek(target);
 	}
 
 	@Override
-	public List<Note> getMonth(Calendar month) {
-		return schedule.getMonth(month);
+	public List<Note> getMonth(Calendar target) {
+		return schedule.getMonth(target);
 	}
 
 	@Override

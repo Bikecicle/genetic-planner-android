@@ -82,7 +82,7 @@ public class ScheduleGenome implements Genome {
 		for (Note note : schedule) {
 			// Lower score the closer together things are scheduled (within a
 			// day)
-			long delta = note.getStart() - prevStart;
+			long delta = note.start - prevStart;
 			if (delta < C.DAY)
 				score -= (C.DAY - delta) * C.SEPARATION_CF;
 		}

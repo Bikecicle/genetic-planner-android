@@ -37,11 +37,11 @@ public interface DataManager {
 
     Note getFirst();
 
-    List<Note> getDay(Calendar day);
+    List<Note> getDay(Calendar target);
 
-    List<Note> getWeek(Calendar week);
+    List<Note> getWeek(Calendar target);
 
-    List<Note> getMonth(Calendar month);
+    List<Note> getMonth(Calendar target);
 
     List<Note> getAll();
 

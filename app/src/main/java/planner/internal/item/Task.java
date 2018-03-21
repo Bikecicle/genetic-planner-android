@@ -59,8 +59,8 @@ public class Task extends Item implements Comparable<Task> {
 
 	@Override
 	public void complete(Note note) {
-		planned -= note.getDuration();
-		complete += note.getDuration();
+		planned -= note.duration;
+		complete += note.duration;
 		notes.remove(note);
 	}
 
