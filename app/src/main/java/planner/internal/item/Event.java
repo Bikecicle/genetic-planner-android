@@ -6,17 +6,19 @@ import java.util.Calendar;
 import java.util.ArrayList;
 
 import planner.internal.core.C;
+import planner.internal.data.EventEntity;
+import planner.internal.data.ItemEntity;
 import planner.internal.recurrence.Recurrence;
 
 public class Event extends Item implements Comparable<Event> {
 
-	private static final long serialVersionUID = 2185845103699193125L;
-	private long start;
-	private long end; // For recurring events
-	private long duration;
-	private boolean complete;
-	private boolean recurring;
-	private Recurrence recurrence;
+	public static final long serialVersionUID = 2185845103699193125L;
+	public long start;
+	public long end; // For recurring events
+	public long duration;
+	public boolean complete;
+	public boolean recurring;
+	public Recurrence recurrence;
 
 	public Event(String title, String details, long start, long duration) {
 		super(ItemType.event, title, details);

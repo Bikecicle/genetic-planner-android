@@ -56,7 +56,7 @@ public class RoomDBAndroid implements DataManager {
     public Agenda getAgenda() {
         Agenda agenda = new Agenda();
         for (ItemEntity entity : agendaDAO.loadAll()) {
-            agenda.add(entity.toItem());
+            agenda.add(Item.fromEntity(entity));
         }
         return agenda;
     }
@@ -68,19 +68,19 @@ public class RoomDBAndroid implements DataManager {
 
     @Override
     public void addItem(Item item) {
-        agendaDAO.insertItem(new ItemEntity(item));
+        agendaDAO.insertItem(Item.toEntity(item));
     }
 
     @Override
     public void removeItem(Item item) {
-        agendaDAO.deleteItem(item.getId());
+        agendaDAO.deleteItem(item.id);
     }
 
     @Override
     public Schedule getSchedule() {
         Schedule schedule = new Schedule();
         for (NoteEntity entity : scheduleDAO.loadAll()) {
-            schedule.add(entity.toNote());
+            schedule.add(Note.fromEntity(entity));
         }
         return schedule;
     }
@@ -89,7 +89,7 @@ public class RoomDBAndroid implements DataManager {
     public void setSchedule(Schedule schedule) {
         List<NoteEntity> entities = new ArrayList<>();
         for (Note note : schedule.getAll()) {
-            entities.add(new NoteEntity(note));
+            entities.add(Note.toEntity(note));
         }
         scheduleDAO.clear();
         scheduleDAO.insertNotes(entities);
@@ -97,7 +97,7 @@ public class RoomDBAndroid implements DataManager {
 
     @Override
     public Note getFirst() {
-        return scheduleDAO.loadFirst().toNote();
+        return Note.fromEntity(scheduleDAO.loadFirst());
     }
 
     @Override
@@ -112,7 +112,7 @@ public class RoomDBAndroid implements DataManager {
         target.add(Calendar.DAY_OF_MONTH, 1);
         long tMax = day.getTimeInMillis();
         for (NoteEntity entity : scheduleDAO.loadRange(tMin, tMax)) {
-            notes.add(entity.toNote());
+            notes.add(Note.fromEntity(entity));
         }
         return notes;
     }
@@ -128,7 +128,7 @@ public class RoomDBAndroid implements DataManager {
         week.add(Calendar.WEEK_OF_YEAR, 1);
         long tMax = week.getTimeInMillis();
         for (NoteEntity entity : scheduleDAO.loadRange(tMin, tMax)) {
-            notes.add(entity.toNote());
+            notes.add(Note.fromEntity(entity));
         }
         return notes;
     }
@@ -144,7 +144,7 @@ public class RoomDBAndroid implements DataManager {
         month.add(Calendar.MONTH, 1);
         long tMax = month.getTimeInMillis();
         for (NoteEntity entity : scheduleDAO.loadRange(tMin, tMax)) {
-            notes.add(entity.toNote());
+            notes.add(Note.fromEntity(entity));
         }
         return notes;
 
@@ -154,18 +154,18 @@ public class RoomDBAndroid implements DataManager {
     public List<Note> getAll() {
         List<Note> notes = new ArrayList<>();
         for (NoteEntity entity: scheduleDAO.loadAll()) {
-           notes.add(entity.toNote());
+           notes.add(Note.fromEntity(entity));
         }
         return notes;
     }
 
     @Override
     public void removeNote(Note note) {
-        scheduleDAO.deleteNote(note.getId());
+        scheduleDAO.deleteNote(note.id);
     }
 
     @Override
     public Note getNoteById(int id) {
-        return scheduleDAO.loadNote(id).toNote();
+        return Note.fromEntity(scheduleDAO.loadNote(id));
     }
 }

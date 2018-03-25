@@ -10,27 +10,16 @@ import planner.internal.item.Note;
  * Created by Griffin on 3/14/2018.
  */
 
-@Entity
+@Entity(tableName = "schedule")
 public class NoteEntity {
 
     @PrimaryKey
-    int id;
-    String title;
-    String details;
-    long start;
-    long duration;
-    int parentId;
+    public int id;
+    public String title;
+    public String details;
+    public long start;
+    public long duration;
+    public int parentId;
 
-    public NoteEntity(Note note) {
-        this.id = note.getId();
-        this.title = note.title;
-    }
-
-    public Note toNote(Item parent) {
-        return new Note(title, details, start, duration, parent);
-    }
-
-    public Note toNote() {
-        return toNote(null);
-    }
+    public NoteEntity() {}
 }

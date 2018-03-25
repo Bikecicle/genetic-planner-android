@@ -11,10 +11,11 @@ import planner.internal.core.C;
 public class Task extends Item implements Comparable<Task> {
 
 	private static final long serialVersionUID = 2422355433614515809L;
-	private long deadline;
-	private long duration;
-	private long complete;
-	private long planned;
+
+	public long deadline;
+	public long duration;
+	public long complete;
+	public long planned;
 
 	public Task(String title, String details, long deadline, long duration) {
 		super(ItemType.task, title, details);
@@ -90,29 +91,5 @@ public class Task extends Item implements Comparable<Task> {
 
 	public long getRemaining() {
 		return duration - complete - planned;
-	}
-
-	public long getDeadline() {
-		return deadline;
-	}
-
-	public void setDeadline(long deadline) {
-		this.deadline = deadline;
-	}
-
-	public long getDuration() {
-		return duration;
-	}
-
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
-
-	public long getComplete() {
-		return complete;
-	}
-
-	public void setComplete(long complete) {
-		this.complete = complete;
 	}
 }

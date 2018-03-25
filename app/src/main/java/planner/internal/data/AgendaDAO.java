@@ -18,7 +18,7 @@ public interface AgendaDAO {
     @Insert
     void insertItem(ItemEntity item);
 
-    @Query("")
+    @Query("SELECT * FROM agenda WHERE id = :id")
     ItemEntity loadItem(int id);
 
     @Query("SELECT * FROM agenda")

@@ -4,22 +4,21 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 import planner.internal.item.Item;
+import planner.internal.item.ItemType;
 
 /**
  * Created by Griffin on 3/14/2018.
  */
 
-@Entity
+@Entity(tableName = "agenda")
 public class ItemEntity {
 
     @PrimaryKey
-    int id;
+    public int id;
+    public String type;
+    public String title;
+    public String details;
+    public int[] children;
 
-    public ItemEntity(Item item) {
-
-    }
-
-    public Item toItem() {
-        return null;
-    }
+    public ItemEntity() {}
 }

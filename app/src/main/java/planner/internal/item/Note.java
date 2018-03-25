@@ -8,6 +8,9 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import planner.internal.core.C;
+import planner.internal.data.AgendaDAO;
+import planner.internal.data.ItemEntity;
+import planner.internal.data.NoteEntity;
 
 public class Note implements Comparable<Note>, Serializable {
 
@@ -26,7 +29,7 @@ public class Note implements Comparable<Note>, Serializable {
 		this.details = details;
 		this.start = start;
 		this.duration = duration;
-		id = hashCode();
+		this.id = hashCode();
 		this.parent = parent;
 	}
 
@@ -71,5 +74,14 @@ public class Note implements Comparable<Note>, Serializable {
 
 	public long getEnd() {
 		return start + duration;
+	}
+
+	public static Note fromEntity(NoteEntity entity) {
+		//return new Note(entity.title,entity.details,entity.start,entity.duration,)
+		return null;
+	}
+
+	public static  NoteEntity toEntity(Note note) {
+		return null;
 	}
 }
