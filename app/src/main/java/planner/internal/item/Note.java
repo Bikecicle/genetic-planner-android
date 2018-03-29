@@ -16,7 +16,7 @@ public class Note implements Comparable<Note>, Serializable {
 
 	private static final long serialVersionUID = 5710812068584817767L;
 
-	public int id;
+	public int noteId;
 	public String title;
 	public String details;
 	public long start;
@@ -29,7 +29,7 @@ public class Note implements Comparable<Note>, Serializable {
 		this.details = details;
 		this.start = start;
 		this.duration = duration;
-		this.id = hashCode();
+		this.noteId = hashCode();
 		this.parent = parent;
 	}
 
@@ -56,7 +56,7 @@ public class Note implements Comparable<Note>, Serializable {
 		String str = f.format(getStartDate().getTime()) + " - " + f.format(getEndDate().getTime()) + ": " + title;
 		if (details != null && !details.equals(""))
 			str += " - " + details;
-		str += " [" + id + "]";
+		str += " [" + noteId + "]";
 		return str;
 	}
 

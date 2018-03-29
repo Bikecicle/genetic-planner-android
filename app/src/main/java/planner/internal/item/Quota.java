@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import planner.internal.core.C;
 import planner.internal.recurrence.Recurrence;
@@ -12,11 +11,11 @@ import planner.internal.recurrence.Recurrence;
 public class Quota extends Item implements Comparable<Quota> {
 
 	private static final long serialVersionUID = 2422355433614515809L;
-	private long deadline;
-	private long duration;
-	private long complete;
-	private long planned;
-	private Recurrence recurrence;
+	public long deadline;
+	public long duration;
+	public long complete;
+	public long planned;
+	public Recurrence recurrence;
 
 	public Quota(String title, String details, long deadline, long duration) {
 		super(ItemType.quota, title, details);
@@ -92,29 +91,5 @@ public class Quota extends Item implements Comparable<Quota> {
 
 	public long getRemaining() {
 		return duration - complete - planned;
-	}
-
-	public long getDeadline() {
-		return deadline;
-	}
-
-	public void setDeadline(long deadline) {
-		this.deadline = deadline;
-	}
-
-	public long getDuration() {
-		return duration;
-	}
-
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
-
-	public long getComplete() {
-		return complete;
-	}
-
-	public void setComplete(long complete) {
-		this.complete = complete;
 	}
 }

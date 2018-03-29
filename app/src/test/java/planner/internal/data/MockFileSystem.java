@@ -10,15 +10,13 @@ import planner.internal.item.Schedule;
 public class MockFileSystem extends FileSystem {
 
     @Override
-    public boolean load() {
+    public void load() {
         agenda = new Agenda();
         schedule = new Schedule();
-        return true;
     }
 
     @Override
-    public boolean save() {
-        return true;
+    public void save() {
     }
 
 }

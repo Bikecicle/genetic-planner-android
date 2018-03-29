@@ -47,7 +47,7 @@ public class ScheduleGenome implements Genome {
 		for (int i = 0; i < taskGenome.length; i++) {
 			Task task = agenda.tasks.get(i);
 			for (int j = 0; j < taskGenome[i].length; j++) {
-				taskGenome[i][j] = randomStart(task.getDeadline() - task.getDuration());
+				taskGenome[i][j] = randomStart(task.deadline - task.duration);
 			}
 		}
 	}
@@ -70,7 +70,7 @@ public class ScheduleGenome implements Genome {
 
 		// Initiative
 		for (int i = 0; i < taskGenome.length; i++) {
-			long deadline = agenda.tasks.get(i).getDeadline();
+			long deadline = agenda.tasks.get(i).deadline;
 			for (int j = 0; j < taskGenome[i].length; j++)
 				// Higher score the further from the deadline something is
 				// scheduled
@@ -123,7 +123,7 @@ public class ScheduleGenome implements Genome {
 			for (int j = 0; j < genes[i].length; j++) {
 				double roll = Math.random();
 				if (roll < mutationRate) {
-					genes[i][j] = randomStart(agenda.tasks.get(i).getDeadline() - agenda.tasks.get(i).getDuration());
+					genes[i][j] = randomStart(agenda.tasks.get(i).deadline - agenda.tasks.get(i).duration);
 				}
 			}
 		}

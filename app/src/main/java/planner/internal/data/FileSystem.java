@@ -15,35 +15,33 @@ import planner.internal.item.Schedule;
 
 public class FileSystem implements DataManager {
 	
-	public String agendaFile = "data/agenda";
+	private String agendaFile = "data/agenda";
 
 	protected Agenda agenda;
 	protected Schedule schedule;
 
 	@Override
-	public boolean load() {
+	public void load() {
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(agendaFile));
 			agenda = (Agenda) in.readObject();
 			in.close();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-			return false;
+			return;
 		}
 		this.schedule = agenda.extractSchedule();
-		return true;
 	}
 
 	@Override
-	public boolean save() {
+	public void save() {
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(agendaFile));
 			out.writeObject(agenda);
 			out.close();
-			return true;
 		} catch (IOException e) {
-			return false;
-		}
+		    e.printStackTrace();
+        }
 	}
 
 	@Override
@@ -101,6 +99,9 @@ public class FileSystem implements DataManager {
 	public List<Note> getMonth(Calendar target) {
 		return schedule.getMonth(target);
 	}
+
+	@Override
+    public List<Note> getYear(Calendar target) { return schedule.getYear(target); }
 
 	@Override
 	public List<Note> getAll() {

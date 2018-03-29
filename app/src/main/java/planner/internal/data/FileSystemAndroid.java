@@ -9,16 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Calendar;
-import java.util.List;
 
-import planner.internal.core.ScheduleGenome;
 import planner.internal.item.Agenda;
-import planner.internal.item.Event;
-import planner.internal.item.Item;
-import planner.internal.item.Note;
-import planner.internal.item.Schedule;
-import planner.internal.item.Task;
 
 public class FileSystemAndroid extends FileSystem {
 
@@ -31,7 +23,7 @@ public class FileSystemAndroid extends FileSystem {
     }
 
     @Override
-    public boolean load() {
+    public void load() {
         if (isExternalStorageReadable()) {
             try {
                 ObjectInputStream in = new ObjectInputStream(new FileInputStream(getExternalFile(agendaFile)));
@@ -39,26 +31,23 @@ public class FileSystemAndroid extends FileSystem {
                 in.close();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
-                return false;
+                return;
             }
         }
         schedule = agenda.extractSchedule();
-        return true;
     }
 
     @Override
-    public boolean save() {
+    public void save() {
         if (isExternalStorageWritable()) {
             try {
                 ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(getExternalFile(agendaFile)));
                 out.writeObject(agenda);
                 out.close();
-                return true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return false;
     }
 
     /* Checks if external storage is available for read and write */

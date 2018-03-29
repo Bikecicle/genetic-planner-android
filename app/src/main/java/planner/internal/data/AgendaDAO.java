@@ -9,7 +9,8 @@ import planner.internal.item.Event;
 import planner.internal.item.Task;
 
 /**
- * Created by Griffin on 3/14/2018.
+ * Created by Griffin Page on 3/14/2018
+ * griffinpage9@gmail.com
  */
 
 @Dao
@@ -18,15 +19,15 @@ public interface AgendaDAO {
     @Insert
     void insertItem(ItemEntity item);
 
-    @Query("SELECT * FROM agenda WHERE id = :id")
-    ItemEntity loadItem(int id);
+    @Query("SELECT * FROM agenda WHERE itemId = :itemId")
+    ItemEntity loadItem(int itemId);
 
     @Query("SELECT * FROM agenda")
     ItemEntity[] loadAll();
 
     @Delete
-    void deleteItem(int id);
+    void deleteItem(ItemEntity item);
 
-    @Delete
+    @Query("DELETE FROM agenda")
     void clear();
 }

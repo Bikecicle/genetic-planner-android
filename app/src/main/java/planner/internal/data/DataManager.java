@@ -3,23 +3,21 @@ package planner.internal.data;
 import java.util.Calendar;
 import java.util.List;
 
-import planner.internal.core.ScheduleGenome;
 import planner.internal.item.Agenda;
-import planner.internal.item.Event;
 import planner.internal.item.Item;
 import planner.internal.item.Note;
 import planner.internal.item.Schedule;
-import planner.internal.item.Task;
 
 /**
- * Created by Griffin on 8/11/2017.
+ * Created by Griffin Page on 8/11/2017
+ * griffinpage9@gmail.com
  */
 
 public interface DataManager {
 
-    boolean load();
+    void load();
 
-    boolean save();
+    void save();
 
     void clean();
 
@@ -42,6 +40,8 @@ public interface DataManager {
     List<Note> getWeek(Calendar target);
 
     List<Note> getMonth(Calendar target);
+
+    List<Note> getYear(Calendar target);
 
     List<Note> getAll();
 

@@ -21,10 +21,10 @@ public interface ScheduleDAO {
     @Insert
     void insertNotes(List<NoteEntity> notes);
 
-    @Query("")
-    NoteEntity loadNote(int id);
+    @Query("SELECT * FROM schedule WHERE noteId = :noteId")
+    NoteEntity loadNote(int noteId);
 
-    @Query("")
+    @Query("SELECT * FROM schedule WHERE start = (SELECT MIN(start) FROM schedule)")
     NoteEntity loadFirst();
 
     @Query("SELECT * FROM schedule WHERE start BETWEEN :tMin AND :tMax")
@@ -34,8 +34,8 @@ public interface ScheduleDAO {
     NoteEntity[] loadAll();
 
     @Delete
-    void deleteNote(int id);
+    void deleteNote(NoteEntity note);
 
-    @Delete
+    @Query("DELETE FROM schedule")
     void clear();
 }

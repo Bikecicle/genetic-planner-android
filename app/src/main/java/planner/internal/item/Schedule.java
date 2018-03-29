@@ -1,5 +1,7 @@
 package planner.internal.item;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,7 +67,7 @@ public class Schedule implements Iterable<Note>, Serializable {
 	}
 	
 	public List<Note> getDay(Calendar day) {
-		List<Note> notes = new ArrayList<Note>();
+		List<Note> notes = new ArrayList<>();
 		for (Note note : this) {
 			Calendar start = note.getStartDate();
 			if (day.get(Calendar.YEAR) == start.get(Calendar.YEAR)
@@ -81,7 +83,7 @@ public class Schedule implements Iterable<Note>, Serializable {
 	}
 
 	public List<Note> getWeek(Calendar week) {
-		List<Note> notes = new ArrayList<Note>();
+		List<Note> notes = new ArrayList<>();
 		for (Note note : this) {
 			Calendar start = note.getStartDate();
 			if (week.get(Calendar.YEAR) == start.get(Calendar.YEAR)
@@ -95,7 +97,7 @@ public class Schedule implements Iterable<Note>, Serializable {
 	}
 
 	public List<Note> getMonth(Calendar month) {
-		List<Note> notes = new ArrayList<Note>();
+		List<Note> notes = new ArrayList<>();
 		for (Note note : this) {
 			Calendar start = note.getStartDate();
 			if (month.get(Calendar.YEAR) == start.get(Calendar.YEAR)
@@ -109,7 +111,7 @@ public class Schedule implements Iterable<Note>, Serializable {
 	}
 	
 	public List<Note> getYear(Calendar year) {
-		List<Note> notes = new ArrayList<Note>();
+		List<Note> notes = new ArrayList<>();
 		for (Note note : this) {
 			Calendar start = note.getStartDate();
 			if (year.get(Calendar.YEAR) == start.get(Calendar.YEAR)) {
@@ -122,32 +124,22 @@ public class Schedule implements Iterable<Note>, Serializable {
 	}
 	
 	public List<Note> getAll() {
-		List<Note> notes = new ArrayList<Note>();
+		List<Note> notes = new ArrayList<>();
 		for (Note note : this) {
 			notes.add(note);
 		}
 		return notes;
 	}
 	
-	public boolean remove(Note note) {
+	public void remove(Note note) {
 		Node temp = head;
 		while (temp.next != null) {
 			if (temp.next.note == note) {
 				temp.next = temp.next.next;
-				return true;
+				return;
 			}
 			temp = temp.next;
 		}
-		return false;
-	}
-	
-	public Note removeFirst() {
-		if (!isEmpty()) { 
-			Note note = head.next.note;
-			head.next = head.next.next;
-			return note;
-		}
-		return null;
 	}
 
 	public int size() {
@@ -159,12 +151,13 @@ public class Schedule implements Iterable<Note>, Serializable {
 	}
 
 
+	@NonNull
 	@Override
 	public Iterator<Note> iterator() {
 		return new Iterator<Note>() {
-			
-			public Node current = head;
-			
+
+			Node current = head;
+
 			@Override
 			public boolean hasNext() {
 				return current.next != null;
@@ -184,9 +177,9 @@ public class Schedule implements Iterable<Note>, Serializable {
 
 		private static final long serialVersionUID = 4757061294462156453L;
 		public Note note;
-		public Node next;
+		Node next;
 
-		public Node(Note note, Node next) {
+		Node(Note note, Node next) {
 			this.next = next;
 			this.note = note;
 		}
@@ -195,11 +188,11 @@ public class Schedule implements Iterable<Note>, Serializable {
 	
 	@Override
 	public String toString() {
-		String str = "";
+		StringBuilder str = new StringBuilder();
 		for (Note note : this) {
-			str += note + "\n";
+			str.append(note).append("\n");
 		}
-		return str;
+		return str.toString();
 	}
 
 	public Note getById(int id) {

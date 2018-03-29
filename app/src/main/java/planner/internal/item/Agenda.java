@@ -3,18 +3,17 @@ package planner.internal.item;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.ArrayList;
 
 public class Agenda implements Serializable {
 
 	private static final long serialVersionUID = 8095770957990266696L;
-	// These lists will remain sorted chronologically (not that it matters)
+
 	public ArrayList<Event> events;
 	public ArrayList<Task> tasks;
 
 	public Agenda() {
-		events = new ArrayList<Event>();
-		tasks = new ArrayList<Task>();
+		events = new ArrayList<>();
+		tasks = new ArrayList<>();
 	}
 
 	public void add(Item item) {
@@ -73,14 +72,14 @@ public class Agenda implements Serializable {
 	public boolean hasItem(Item item) {
 		if (item.type == ItemType.event) {
 			for (Event event : events) {
-				if (event.id == item.id) {
+				if (event.itemId == item.itemId) {
 					return true;
 				}
 			}
 		}
 		else if (item.type == ItemType.task) {
 			for (Task task : tasks) {
-				if (task.id == item.id) {
+				if (task.itemId == item.itemId) {
 					return true;
 				}
 			}

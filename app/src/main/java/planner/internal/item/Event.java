@@ -3,11 +3,8 @@ package planner.internal.item;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.ArrayList;
 
 import planner.internal.core.C;
-import planner.internal.data.EventEntity;
-import planner.internal.data.ItemEntity;
 import planner.internal.recurrence.Recurrence;
 
 public class Event extends Item implements Comparable<Event> {

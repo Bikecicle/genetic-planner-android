@@ -14,11 +14,17 @@ import planner.internal.item.ItemType;
 public class ItemEntity {
 
     @PrimaryKey
-    public int id;
+    public int itemId;
     public String type;
     public String title;
     public String details;
-    public int[] children;
+
+    // Event fields
+    public long start;
+    public long duration;
+
+    // Task fields
+    public long deadline;
 
     public ItemEntity() {}
 }

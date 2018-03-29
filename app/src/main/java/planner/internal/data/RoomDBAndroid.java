@@ -37,13 +37,11 @@ public class RoomDBAndroid implements DataManager {
     }
 
     @Override
-    public boolean load() {
-        return false;
+    public void load() {
     }
 
     @Override
-    public boolean save() {
-        return false;
+    public void save() {
     }
 
     @Override
@@ -73,7 +71,7 @@ public class RoomDBAndroid implements DataManager {
 
     @Override
     public void removeItem(Item item) {
-        agendaDAO.deleteItem(item.id);
+        agendaDAO.deleteItem(Item.toEntity(item));
     }
 
     @Override
@@ -151,6 +149,21 @@ public class RoomDBAndroid implements DataManager {
     }
 
     @Override
+    public List<Note> getYear(Calendar target) {
+        List<Note> notes = new ArrayList<>();
+        Calendar year = Calendar.getInstance();
+        year.setTimeInMillis(0);
+        year.set(Calendar.YEAR, target.get(Calendar.YEAR));
+        long tMin = year.getTimeInMillis();
+        year.add(Calendar.YEAR, 1);
+        long tMax = year.getTimeInMillis();
+        for (NoteEntity entity : scheduleDAO.loadRange(tMin, tMax)) {
+            notes.add(Note.fromEntity(entity));
+        }
+        return notes;
+    }
+
+    @Override
     public List<Note> getAll() {
         List<Note> notes = new ArrayList<>();
         for (NoteEntity entity: scheduleDAO.loadAll()) {
@@ -161,7 +174,7 @@ public class RoomDBAndroid implements DataManager {
 
     @Override
     public void removeNote(Note note) {
-        scheduleDAO.deleteNote(note.id);
+        scheduleDAO.deleteNote(Note.toEntity(note));
     }
 
     @Override
