@@ -16,11 +16,11 @@ public abstract class Item implements Serializable {
 
 	public ArrayList<Note> notes;
 
-	public Item(ItemType type, String title, String details) {
+	public Item(int itemId, ItemType type, String title, String details) {
+		this.itemId = itemId;
 		this.type = type;
 		this.title = title;
 		this.details = details;
-		itemId = hashCode();
 		this.notes = new ArrayList<>();
 	}
 	
@@ -34,9 +34,9 @@ public abstract class Item implements Serializable {
 
 	public static Item fromEntity(ItemEntity entity) {
 		if (entity.type.equals(ItemType.event.name)) {
-			return new Event(entity.title, entity.details, entity.start, entity.duration);
+			return new Event(entity.itemId, entity.title, entity.details, entity.start, entity.duration);
 		} else if (entity.type.equals(ItemType.task.name)) {
-			return new Task(entity.title, entity.details, entity.deadline, entity.duration);
+			return new Task(entity.itemId, entity.title, entity.details, entity.deadline, entity.duration);
 		}
 		return null;
 	}
@@ -57,5 +57,10 @@ public abstract class Item implements Serializable {
 		entity.title = item.title;
 		entity.details = item.details;
 		return entity;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString();
 	}
 }

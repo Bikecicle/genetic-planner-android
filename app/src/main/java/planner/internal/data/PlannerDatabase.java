@@ -8,7 +8,7 @@ import android.arch.persistence.room.RoomDatabase;
  * griffinpage9@gmail.com
  */
 
-@Database(entities = {ItemEntity.class, NoteEntity.class}, version = 1)
+@Database(entities = {ItemEntity.class, NoteEntity.class}, version = 1, exportSchema = false)
 abstract class PlannerDatabase extends RoomDatabase{
     abstract AgendaDAO agendaDAO();
     abstract ScheduleDAO scheduleDAO();

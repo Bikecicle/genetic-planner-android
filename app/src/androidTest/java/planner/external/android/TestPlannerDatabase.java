@@ -2,6 +2,7 @@ package planner.external.android;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.junit.After;
 import org.junit.Before;
@@ -39,14 +40,21 @@ public class TestPlannerDatabase {
         Calendar c = Calendar.getInstance();
         Agenda a = null;
         c.add(Calendar.DAY_OF_YEAR, 1);
-        Event e1 = new Event("e1", "event1", c.getTimeInMillis(), 60);
+        Event e1 = new Event(10,"e1", "event1", c.getTimeInMillis(), 60);
         c.add(Calendar.HOUR, 2);
-        Task t1 = new Task("t1", "task1", c.getTimeInMillis(), 30);
+        Task t1 = new Task(11, "t1", "task1", c.getTimeInMillis(), 30);
         dm.addItem(e1);
         a = dm.getAgenda();
+        assertFalse(a.isEmpty());
         assertTrue(a.hasItem(e1));
         dm.addItem(t1);
+        a = dm.getAgenda();
         assertTrue(a.hasItem(e1));
         assertTrue(a.hasItem(t1));
+    }
+
+    @Test
+    public void readWriteNoteTest() throws Exception {
+
     }
 }

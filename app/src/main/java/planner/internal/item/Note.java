@@ -8,8 +8,6 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import planner.internal.core.C;
-import planner.internal.data.AgendaDAO;
-import planner.internal.data.ItemEntity;
 import planner.internal.data.NoteEntity;
 
 public class Note implements Comparable<Note>, Serializable {
@@ -24,7 +22,8 @@ public class Note implements Comparable<Note>, Serializable {
 
 	public Item parent;
 
-	public Note(String title, String details, long start, long duration, Item parent) {
+	public Note(int noteId, String title, String details, long start, long duration, Item parent) {
+		this.noteId = noteId;
 		this.title = title;
 		this.details = details;
 		this.start = start;

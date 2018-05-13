@@ -2,6 +2,7 @@ package planner.internal.data;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,13 +20,16 @@ import planner.internal.item.Schedule;
 
 public class RoomDBAndroid implements DataManager {
 
+    private static final String TAG = "DATA";
+
     private PlannerDatabase plannerDatabase;
     private AgendaDAO agendaDAO;
     private ScheduleDAO scheduleDAO;
 
     public RoomDBAndroid(Context context, boolean inMemory) {
         if (!inMemory)
-            plannerDatabase = Room.databaseBuilder(context.getApplicationContext(), PlannerDatabase.class, "planner_database").build();
+            plannerDatabase = Room.databaseBuilder(context.getApplicationContext(),
+                    PlannerDatabase.class, "planner_database").allowMainThreadQueries().build();
         else
             plannerDatabase = Room.inMemoryDatabaseBuilder(context, PlannerDatabase.class).build();
         agendaDAO = plannerDatabase.agendaDAO();
@@ -48,6 +52,7 @@ public class RoomDBAndroid implements DataManager {
     public void clean() {
         agendaDAO.clear();
         scheduleDAO.clear();
+        Log.d(TAG, "Tables cleared");
     }
 
     @Override
@@ -56,22 +61,26 @@ public class RoomDBAndroid implements DataManager {
         for (ItemEntity entity : agendaDAO.loadAll()) {
             agenda.add(Item.fromEntity(entity));
         }
+        Log.d(TAG, "Agenda loaded: " + agenda);
         return agenda;
     }
 
     @Override
     public void cleanAgenda() {
         agendaDAO.clear();
+        Log.d(TAG, "Agenda table cleared");
     }
 
     @Override
     public void addItem(Item item) {
         agendaDAO.insertItem(Item.toEntity(item));
+        Log.d(TAG, "Item inserted: " + item);
     }
 
     @Override
     public void removeItem(Item item) {
         agendaDAO.deleteItem(Item.toEntity(item));
+        Log.d(TAG, "Item removed: " + item);
     }
 
     @Override
@@ -80,6 +89,7 @@ public class RoomDBAndroid implements DataManager {
         for (NoteEntity entity : scheduleDAO.loadAll()) {
             schedule.add(Note.fromEntity(entity));
         }
+        Log.d(TAG, "Schedule loaded: " + schedule);
         return schedule;
     }
 
@@ -91,11 +101,14 @@ public class RoomDBAndroid implements DataManager {
         }
         scheduleDAO.clear();
         scheduleDAO.insertNotes(entities);
+        Log.d(TAG, "Schedule set as: " + schedule);
     }
 
     @Override
     public Note getFirst() {
-        return Note.fromEntity(scheduleDAO.loadFirst());
+        Note note = Note.fromEntity(scheduleDAO.loadFirst());
+        Log.d(TAG, "First note loaded: " + note);
+        return note;
     }
 
     @Override
@@ -128,6 +141,7 @@ public class RoomDBAndroid implements DataManager {
         for (NoteEntity entity : scheduleDAO.loadRange(tMin, tMax)) {
             notes.add(Note.fromEntity(entity));
         }
+
         return notes;
     }
 

@@ -108,10 +108,11 @@ public class AddItemActivity extends AppCompatActivity {
                 String details = ((EditText) findViewById(R.id.add_details)).getText().toString();
 
                 Item item = null;
+                int itemId = (int) (Math.random() * Integer.MAX_VALUE);
                 if (itemType == ItemType.event) {
-                    item = new Event(title, details, date.getTimeInMillis(), duration.getTimeInMillis());
+                    item = new Event(itemId, title, details, date.getTimeInMillis(), duration.getTimeInMillis());
                 } else if (itemType == ItemType.task){
-                    item = new Task(title, details, date.getTimeInMillis(), duration.getTimeInMillis());
+                    item = new Task(itemId, title, details, date.getTimeInMillis(), duration.getTimeInMillis());
                 } else if (itemType == ItemType.routine) {
                     // TODO
                 } else if (itemType == ItemType.quota){

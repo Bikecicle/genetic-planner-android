@@ -17,16 +17,16 @@ public class Task extends Item implements Comparable<Task> {
 	public long complete;
 	public long planned;
 
-	public Task(String title, String details, long deadline, long duration) {
-		super(ItemType.task, title, details);
+	public Task(int itemId, String title, String details, long deadline, long duration) {
+		super(itemId, ItemType.task, title, details);
 		this.deadline = deadline;
 		this.duration = duration;
 		this.complete = 0;
 		this.planned = 0;
 	}
 
-	public Task(String title, String details, String deadlineDate, int minutes) {
-		super(ItemType.task, title, details);
+	public Task(int itemId, String title, String details, String deadlineDate, int minutes) {
+		super(itemId, ItemType.task, title, details);
 		Calendar c = Calendar.getInstance();
 		try {
 			c.setTime(new SimpleDateFormat(C.DATE_TIME_FORMAT).parse(deadlineDate));
@@ -42,7 +42,8 @@ public class Task extends Item implements Comparable<Task> {
 
 	@Override
 	public ArrayList<Note> generateNotes(long[] genome) {
-		ArrayList<Note> newNotes = new ArrayList<Note>();
+		ArrayList<Note> newNotes = new ArrayList<>();
+		int noteId = (int) (Math.random() * Integer.MAX_VALUE);
 		for (int i = 0; i < genome.length; i++) {
 			long tabDuration = 0;
 			if (getRemaining() > C.HOUR) {
@@ -52,7 +53,7 @@ public class Task extends Item implements Comparable<Task> {
 				tabDuration = getRemaining();
 				planned += getRemaining();
 			}
-			newNotes.add(new Note(title, details, genome[i], tabDuration, this));
+			newNotes.add(new Note(noteId, title, details, genome[i], tabDuration, this));
 		}
 		notes.addAll(newNotes);
 		return newNotes;
@@ -79,7 +80,7 @@ public class Task extends Item implements Comparable<Task> {
 	@Override
 	public String toString() {
 		SimpleDateFormat f = new SimpleDateFormat(C.DATE_TIME_FORMAT);
-		return f.format(getDeadlineDate().getTime()) + ": " + title + " - " + (duration / C.MINUTE) + " min - "
+		return "[" + itemId + "] " + f.format(getDeadlineDate().getTime()) + ": " + title + " - " + (duration / C.MINUTE) + " min - "
 				+ details;
 	}
 

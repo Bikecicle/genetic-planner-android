@@ -11,22 +11,23 @@ import planner.internal.recurrence.Recurrence;
 public class Quota extends Item implements Comparable<Quota> {
 
 	private static final long serialVersionUID = 2422355433614515809L;
+
 	public long deadline;
 	public long duration;
 	public long complete;
 	public long planned;
 	public Recurrence recurrence;
 
-	public Quota(String title, String details, long deadline, long duration) {
-		super(ItemType.quota, title, details);
+	public Quota(int itemId, String title, String details, long deadline, long duration) {
+		super(itemId, ItemType.quota, title, details);
 		this.deadline = deadline;
 		this.duration = duration;
 		this.complete = 0;
 		this.planned = 0;
 	}
 
-	public Quota(String title, String details, String deadlineDate, int minutes) {
-		super(ItemType.quota, title, details);
+	public Quota(int itemId, String title, String details, String deadlineDate, int minutes) {
+		super(itemId, ItemType.quota, title, details);
 		Calendar c = Calendar.getInstance();
 		try {
 			c.setTime(new SimpleDateFormat(C.DATE_TIME_FORMAT).parse(deadlineDate));
@@ -43,6 +44,7 @@ public class Quota extends Item implements Comparable<Quota> {
 	@Override
 	public ArrayList<Note> generateNotes(long[] genome) {
 		ArrayList<Note> newNotes = new ArrayList<Note>();
+		int noteId = (int) (Math.random() * Integer.MAX_VALUE);
 		for (int i = 0; i < genome.length; i++) {
 			long tabDuration = 0;
 			if (getRemaining() > C.HOUR) {
@@ -52,7 +54,7 @@ public class Quota extends Item implements Comparable<Quota> {
 				tabDuration = getRemaining();
 				planned += getRemaining();
 			}
-			newNotes.add(new Note(title, details, genome[i], tabDuration, this));
+			newNotes.add(new Note(noteId, title, details, genome[i], tabDuration, this));
 		}
 		notes.addAll(newNotes);
 		return newNotes;

@@ -2,6 +2,7 @@ package planner.internal.data;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
@@ -9,8 +10,11 @@ import android.arch.persistence.room.PrimaryKey;
  * griffinpage9@gmail.com
  */
 
-@Entity(tableName = "schedule", foreignKeys = @ForeignKey(entity = ItemEntity.class,
-        parentColumns = "itemId", childColumns = "parentId"))
+@Entity(tableName = "schedule",
+        indices = @Index("parentId"),
+        foreignKeys = @ForeignKey(entity = ItemEntity.class,
+                parentColumns = "itemId",
+                childColumns = "parentId"))
 public class NoteEntity {
 
     @PrimaryKey
@@ -22,5 +26,6 @@ public class NoteEntity {
 
     int parentId;
 
-    NoteEntity() {}
+    NoteEntity() {
+    }
 }

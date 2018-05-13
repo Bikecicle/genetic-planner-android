@@ -17,8 +17,8 @@ public class Event extends Item implements Comparable<Event> {
 	public boolean recurring;
 	public Recurrence recurrence;
 
-	public Event(String title, String details, long start, long duration) {
-		super(ItemType.event, title, details);
+	public Event(int itemId, String title, String details, long start, long duration) {
+		super(itemId, ItemType.event, title, details);
 		this.start = start;
 		this.duration = duration;
 		complete = false;
@@ -26,8 +26,8 @@ public class Event extends Item implements Comparable<Event> {
 		recurrence = null;
 	}
 
-	public Event(String title, String details, long start, long duration, Recurrence recurrence, long end) {
-		super(ItemType.event, title, details);
+	public Event(int itemId, String title, String details, long start, long duration, Recurrence recurrence, long end) {
+		super(itemId, ItemType.event, title, details);
 		this.start = start;
 		this.duration = duration;
 		if (recurrence != null) {
@@ -40,13 +40,14 @@ public class Event extends Item implements Comparable<Event> {
 	@Override
 	public ArrayList<Note> generateNotes(long[] gene) {
 		ArrayList<Note> newNotes = new ArrayList<Note>();
+        int noteId = (int) (Math.random() * Integer.MAX_VALUE);
 		if (!complete) {
 			if (!recurring) {
-				newNotes.add(new Note(title, details, start, duration, this));
+				newNotes.add(new Note(noteId, title, details, start, duration, this));
 			} else {
 				ArrayList<Long> instances = recurrence.getInstances(start, end);
 				for (long instance : instances) {
-					newNotes.add(new Note(title, details, instance, duration, this));
+					newNotes.add(new Note(noteId, title, details, instance, duration, this));
 				}
 			}
 			notes.addAll(newNotes);
@@ -77,7 +78,7 @@ public class Event extends Item implements Comparable<Event> {
 	@Override
 	public String toString() {
 		SimpleDateFormat f = new SimpleDateFormat(C.DATE_TIME_FORMAT);
-		String str = f.format(getStartDate().getTime()) + " - " + f.format(getEndDate().getTime()) + ": " + title;
+		String str = "[" + itemId + "] " +  f.format(getStartDate().getTime()) + " - " + f.format(getEndDate().getTime()) + ": " + title;
 		if (details != null && !details.equals(""))
 			str += " - " + details;
 		if (recurring)

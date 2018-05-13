@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import planner.internal.core.PlanningAssistant;
-import planner.internal.data.FileSystemAndroid;
+import planner.internal.data.RoomDBAndroid;
 
 public class MainActivity extends AppCompatActivity implements NoteListFragment.OnFragmentInteractionListener {
 
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PlanningAssistant planningAssistant = PlanningAssistant.getInstance(new FileSystemAndroid(this));
+        PlanningAssistant planningAssistant = PlanningAssistant.getInstance(new RoomDBAndroid(this, false));
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         FloatingActionButton fab = findViewById(R.id.main_fab);
-        fab.setOnClickListener( new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), AddItemActivity.class);

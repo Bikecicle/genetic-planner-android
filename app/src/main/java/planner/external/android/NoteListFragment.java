@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import planner.internal.core.PlanningAssistant;
+import planner.internal.data.RoomDBAndroid;
 import planner.internal.item.Note;
 
 
