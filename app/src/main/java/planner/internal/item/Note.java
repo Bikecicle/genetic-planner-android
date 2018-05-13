@@ -14,7 +14,7 @@ public class Note implements Comparable<Note>, Serializable {
 
 	private static final long serialVersionUID = 5710812068584817767L;
 
-	public int noteId;
+	private int noteId;
 	public String title;
 	public String details;
 	public long start;
@@ -75,12 +75,19 @@ public class Note implements Comparable<Note>, Serializable {
 		return start + duration;
 	}
 
-	public static Note fromEntity(NoteEntity entity) {
-		//return new Note(entity.title,entity.details,entity.start,entity.duration,)
-		return null;
+	public static Note fromEntity(NoteEntity entity, Item parent) {
+		return new Note(entity.noteId, entity.title, entity.details, entity.start, entity.duration,
+                parent);
 	}
 
 	public static  NoteEntity toEntity(Note note) {
-		return null;
+		NoteEntity entity = new NoteEntity();
+		entity.noteId = note.noteId;
+		entity.title = note.title;
+		entity.details = note.details;
+		entity.duration = note.duration;
+		entity.duration = note.duration;
+		entity.parentId = note.parent.itemId;
+		return entity;
 	}
 }

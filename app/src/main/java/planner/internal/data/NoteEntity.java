@@ -23,9 +23,8 @@ public class NoteEntity {
     public String details;
     public long start;
     public long duration;
+    public int parentId;
 
-    int parentId;
-
-    NoteEntity() {
+    public NoteEntity() {
     }
 }

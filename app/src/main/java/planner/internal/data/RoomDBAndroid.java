@@ -20,7 +20,7 @@ import planner.internal.item.Schedule;
 
 public class RoomDBAndroid implements DataManager {
 
-    private static final String TAG = "DATA";
+    private static final String TAG = "RoomDataManager";
 
     private PlannerDatabase plannerDatabase;
     private AgendaDAO agendaDAO;
@@ -67,8 +67,7 @@ public class RoomDBAndroid implements DataManager {
 
     @Override
     public void cleanAgenda() {
-        agendaDAO.clear();
-        Log.d(TAG, "Agenda table cleared");
+        // TODO: Wipe all note relations
     }
 
     @Override
@@ -87,7 +86,7 @@ public class RoomDBAndroid implements DataManager {
     public Schedule getSchedule() {
         Schedule schedule = new Schedule();
         for (NoteEntity entity : scheduleDAO.loadAll()) {
-            schedule.add(Note.fromEntity(entity));
+            schedule.add(linkParent(entity));
         }
         Log.d(TAG, "Schedule loaded: " + schedule);
         return schedule;
@@ -96,7 +95,7 @@ public class RoomDBAndroid implements DataManager {
     @Override
     public void setSchedule(Schedule schedule) {
         List<NoteEntity> entities = new ArrayList<>();
-        for (Note note : schedule.getAll()) {
+        for (Note note : schedule) {
             entities.add(Note.toEntity(note));
         }
         scheduleDAO.clear();
@@ -106,7 +105,7 @@ public class RoomDBAndroid implements DataManager {
 
     @Override
     public Note getFirst() {
-        Note note = Note.fromEntity(scheduleDAO.loadFirst());
+        Note note = linkParent(scheduleDAO.loadFirst());
         Log.d(TAG, "First note loaded: " + note);
         return note;
     }
@@ -119,12 +118,14 @@ public class RoomDBAndroid implements DataManager {
         day.set(Calendar.YEAR, target.get(Calendar.YEAR));
         day.set(Calendar.MONTH, target.get(Calendar.MONTH));
         day.set(Calendar.DAY_OF_MONTH, target.get(Calendar.DAY_OF_MONTH));
+        Log.d(TAG, "Loading notes for the day of " + day.getTime());
         long tMin = day.getTimeInMillis();
         target.add(Calendar.DAY_OF_MONTH, 1);
         long tMax = day.getTimeInMillis();
         for (NoteEntity entity : scheduleDAO.loadRange(tMin, tMax)) {
-            notes.add(Note.fromEntity(entity));
+            notes.add(linkParent(entity));
         }
+        Log.d(TAG, "Notes loaded: " + notes);
         return notes;
     }
 
@@ -135,11 +136,12 @@ public class RoomDBAndroid implements DataManager {
         week.setTimeInMillis(0);
         week.set(Calendar.YEAR, target.get(Calendar.YEAR));
         week.set(Calendar.WEEK_OF_YEAR, target.get(Calendar.WEEK_OF_YEAR));
+        Log.d(TAG, "Loading notes for the week of " + week.getTime());
         long tMin = week.getTimeInMillis();
         week.add(Calendar.WEEK_OF_YEAR, 1);
         long tMax = week.getTimeInMillis();
         for (NoteEntity entity : scheduleDAO.loadRange(tMin, tMax)) {
-            notes.add(Note.fromEntity(entity));
+            notes.add(linkParent(entity));
         }
 
         return notes;
@@ -152,11 +154,12 @@ public class RoomDBAndroid implements DataManager {
         month.setTimeInMillis(0);
         month.set(Calendar.YEAR, target.get(Calendar.YEAR));
         month.set(Calendar.MONTH, target.get(Calendar.MONTH));
+        Log.d(TAG, "Loading notes for the month of " + month.getTime());
         long tMin = month.getTimeInMillis();
         month.add(Calendar.MONTH, 1);
         long tMax = month.getTimeInMillis();
         for (NoteEntity entity : scheduleDAO.loadRange(tMin, tMax)) {
-            notes.add(Note.fromEntity(entity));
+            notes.add(linkParent(entity));
         }
         return notes;
 
@@ -168,11 +171,12 @@ public class RoomDBAndroid implements DataManager {
         Calendar year = Calendar.getInstance();
         year.setTimeInMillis(0);
         year.set(Calendar.YEAR, target.get(Calendar.YEAR));
+        Log.d(TAG, "Loading notes for the year of " + year.getTime());
         long tMin = year.getTimeInMillis();
         year.add(Calendar.YEAR, 1);
         long tMax = year.getTimeInMillis();
         for (NoteEntity entity : scheduleDAO.loadRange(tMin, tMax)) {
-            notes.add(Note.fromEntity(entity));
+            notes.add(linkParent(entity));
         }
         return notes;
     }
@@ -181,8 +185,9 @@ public class RoomDBAndroid implements DataManager {
     public List<Note> getAll() {
         List<Note> notes = new ArrayList<>();
         for (NoteEntity entity: scheduleDAO.loadAll()) {
-           notes.add(Note.fromEntity(entity));
+           notes.add(linkParent(entity));
         }
+        Log.d(TAG, "All notes loaded: " + notes);
         return notes;
     }
 
@@ -193,6 +198,14 @@ public class RoomDBAndroid implements DataManager {
 
     @Override
     public Note getNoteById(int id) {
-        return Note.fromEntity(scheduleDAO.loadNote(id));
+        return linkParent(scheduleDAO.loadNote(id));
+    }
+
+    private Note linkParent(NoteEntity entity) {
+        Item parent = Item.fromEntity(agendaDAO.loadItem(entity.parentId));
+        Note note = Note.fromEntity(entity, parent);
+        assert parent != null;
+        parent.notes.add(note);
+        return note;
     }
 }

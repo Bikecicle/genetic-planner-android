@@ -4,12 +4,16 @@
     tools:context="planner.external.android.MainActivity">
     <item
         android:id="@+id/action_reschedule"
-        android:orderInCategory="100"
+        android:orderInCategory="101"
         android:title="@string/action_reschedule"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="101"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_clear"
+        android:orderInCategory="102"
+        android:title="@string/clear_data" />
 </menu>

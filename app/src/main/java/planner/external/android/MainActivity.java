@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import planner.internal.core.PlanningAssistant;
 import planner.internal.data.RoomDBAndroid;
@@ -35,13 +36,14 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private PlanningAssistant planningAssistant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PlanningAssistant planningAssistant = PlanningAssistant.getInstance(new RoomDBAndroid(this, false));
+        planningAssistant = PlanningAssistant.getInstance(new RoomDBAndroid(this, false));
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -85,6 +87,12 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        } else if (id == R.id.action_reschedule) {
+            planningAssistant.planSchedule();
+            return true;
+        } else if (id == R.id.action_clear) {
+            planningAssistant.clean();
             return true;
         }
 
