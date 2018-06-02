@@ -7,4 +7,4 @@ The planning aspect incorporates a genetic algorithm to allow for easy addition 
 2. Spread out tasks
 3. Plan them for sooner rather than later
 
-For now, I am working on a rudimentary UI for testing,
+I have migrated from a console UI to Android, so for now, I am working out data storage and initial app design for testing. Next I plan on adding functionality aimed at using insights from the actual time spent on a task or delayed/missed tasks to better adjust planning based on individual habits.
