@@ -1,6 +1,7 @@
 package planner.external.android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,8 +35,6 @@ public class NoteListFragment extends Fragment {
     private static final String ARG_INTERVAL = "interval";
 
     private Interval interval;
-    private Calendar interest;
-    private PlanningAssistant planningAssistant;
 
     private OnFragmentInteractionListener mListener;
 
@@ -63,8 +63,6 @@ public class NoteListFragment extends Fragment {
         if (getArguments() != null) {
             interval = (Interval) getArguments().getSerializable(ARG_INTERVAL);
         }
-        interest = Calendar.getInstance();
-        planningAssistant = PlanningAssistant.getInstance();
     }
 
     @Override
@@ -78,23 +76,29 @@ public class NoteListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Calendar interest = Calendar.getInstance();
+        PlanningAssistant planningAssistant = PlanningAssistant.getInstance(new RoomDBAndroid(getContext(), false));
+
         TextView tvTitle = getView().findViewById(R.id.note_fragment_title);
         tvTitle.setText(interval.fTitle);
 
         TextView tvInterest = getView().findViewById(R.id.note_fragment_interest);
+        ListView lvTabs = getView().findViewById(R.id.note_fragment_list);
+
         tvInterest.setText(new SimpleDateFormat(interval.iFormat).format(interest.getTime()));
 
-        List<Note> notes = planningAssistant.getDay(interest);
-        NoteAdapter adapter = new NoteAdapter(this.getContext(), notes, interval.lFormat);
-        ListView lvTabs = getView().findViewById(R.id.note_fragment_list);
-        lvTabs.setAdapter(adapter);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        List<Note> notes = null;
+        if (interval == Interval.day) {
+            notes = planningAssistant.getDay(interest);
+        } else if (interval == Interval.week) {
+            notes = planningAssistant.getWeek(interest);
+        } else if (interval == Interval.month) {
+            notes = planningAssistant.getMonth(interest);
+        } else if (interval == Interval.year) {
+            notes = planningAssistant.getYear(interest);
         }
+        NoteAdapter adapter = new NoteAdapter(this.getContext(), notes, interval.lFormat);
+        lvTabs.setAdapter(adapter);
     }
 
     @Override

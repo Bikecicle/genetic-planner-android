@@ -1,8 +1,8 @@
 package planner.external.android;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,11 +12,11 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import java.util.Calendar;
 
 import planner.internal.core.PlanningAssistant;
+import planner.internal.data.RoomDBAndroid;
 import planner.internal.item.Event;
 import planner.internal.item.Item;
 import planner.internal.item.ItemType;
@@ -39,7 +39,7 @@ public class AddItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
-        planningAssistant = PlanningAssistant.getInstance();
+        planningAssistant = PlanningAssistant.getInstance(new RoomDBAndroid(this, false));
 
         ((NumberPicker) findViewById(R.id.add_time_hr)).setMinValue(TIME_HR_MIN);
         ((NumberPicker) findViewById(R.id.add_time_hr)).setMaxValue(TIME_HR_MAX);
@@ -101,6 +101,7 @@ public class AddItemActivity extends AppCompatActivity {
                 date.set(Calendar.MINUTE, ((NumberPicker) findViewById(R.id.add_time_min)).getValue());
 
                 Calendar duration = Calendar.getInstance();
+                duration.setTimeInMillis(0);
                 duration.set(Calendar.HOUR_OF_DAY, ((NumberPicker) findViewById(R.id.add_dur_hr)).getValue());
                 duration.set(Calendar.MINUTE, ((NumberPicker) findViewById(R.id.add_dur_min)).getValue());
 
@@ -120,7 +121,7 @@ public class AddItemActivity extends AppCompatActivity {
                 }
                 planningAssistant.addItem(item);
                 planningAssistant.planSchedule();
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
+                Intent intent = new Intent(view.getContext(), MainActivityWithTabs.class);
                 startActivity(intent);
             }
         });

@@ -1,5 +1,7 @@
 package planner.internal.core;
 
+import android.util.Log;
+
 import java.util.Calendar;
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class PlanningAssistant {
 
     private static PlanningAssistant planningAssistant;
 
+    private final String TAG = "Planning";
     private final boolean loggingEnabled = false;
 
     private DataManager dataManager;
@@ -28,10 +31,6 @@ public class PlanningAssistant {
         if (planningAssistant == null) {
             planningAssistant = new PlanningAssistant(dataManager);
         }
-        return planningAssistant;
-    }
-
-    public static PlanningAssistant getInstance() {
         return planningAssistant;
     }
 
@@ -53,6 +52,7 @@ public class PlanningAssistant {
         evolutionManager.runGenerations(C.GENERATION_COUNT);
         if (loggingEnabled)
             evolutionManager.saveLog(C.logFile);
+        Log.d("TAG", "Schedule evolved: " + evolutionManager.getResult());
         dataManager.setSchedule(((ScheduleGenome) evolutionManager.getResult()).generateSchedule());
     }
 
@@ -71,6 +71,8 @@ public class PlanningAssistant {
     public List<Note> getMonth(Calendar month) {
         return dataManager.getMonth(month);
     }
+
+    public List<Note> getYear(Calendar year) { return dataManager.getYear(year); }
 
     public List<Note> getAll() {
         return dataManager.getAll();

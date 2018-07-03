@@ -1,64 +1,57 @@
 package planner.external.android;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import planner.internal.core.PlanningAssistant;
 import planner.internal.data.RoomDBAndroid;
+import planner.internal.item.Note;
 
-public class MainActivity extends AppCompatActivity implements NoteListFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-    private PlanningAssistant planningAssistant;
+    PlanningAssistant planningAssistant;
+    NoteAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
         planningAssistant = PlanningAssistant.getInstance(new RoomDBAndroid(this, false));
 
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        final PlanningAssistant planningAssistant = PlanningAssistant.getInstance(
+                new RoomDBAndroid(this, false));
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.main_container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        TabLayout tabLayout = findViewById(R.id.main_tabs);
-
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        List<Note> notes = planningAssistant.getAll();
+        ListView noteList = findViewById(R.id.main_note_list);
+        adapter = new NoteAdapter(this, notes, Interval.week.lFormat);
+        noteList.setAdapter(adapter);
+        noteList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(view.getContext(), NoteActivity.class);
+                Bundle bundle = new Bundle();
+                int noteId = ((Note) adapterView.getSelectedItem()).noteId;
+                ArrayList<Integer> val = new ArrayList();
+                val.add(noteId);
+                bundle.putIntegerArrayList("NOTE_ID", val);
+                intent.putExtras(bundle);
+                startActivity(intent); 
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.main_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
                 startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -90,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
             return true;
         } else if (id == R.id.action_reschedule) {
             planningAssistant.planSchedule();
+            adapter.clear();
+            adapter.addAll(planningAssistant.getAll());
             return true;
         } else if (id == R.id.action_clear) {
             planningAssistant.clean();
@@ -99,30 +93,4 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return NoteListFragment.newInstance(Interval.values()[position]);
-        }
-
-        @Override
-        public int getCount() {
-            // Number of pages (interval options)
-            return 4;
-        }
-    }
 }

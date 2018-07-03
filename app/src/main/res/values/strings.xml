@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Genetic Planner</string>
     <string name="interest">Interest</string>
+    <string name="title_activity_main_with_tabs">MainActivity</string>
     <string name="title_activity_main">MainActivity</string>
+
     <string name="tab_text_0">Day</string>
     <string name="tab_text_1">Week</string>
     <string name="tab_text_2">Month</string>
@@ -96,5 +98,7 @@
     <string name="time_colon">:</string>
     <string name="add">Add</string>
     <string name="clear_data">Clear Data</string>
+    <string name="title_activity_tees">tees</string>
+    <string name="title_activity_note">NoteActivity</string>
 
 </resources>

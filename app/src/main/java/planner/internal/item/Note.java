@@ -14,7 +14,7 @@ public class Note implements Comparable<Note>, Serializable {
 
 	private static final long serialVersionUID = 5710812068584817767L;
 
-	private int noteId;
+	public int noteId;
 	public String title;
 	public String details;
 	public long start;

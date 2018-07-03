@@ -22,6 +22,13 @@
                 android:text="@string/view_title_default"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
+            <Button
+                android:id="@+id/interest_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Back" />
+
             <TextView
                 android:id="@+id/note_fragment_interest"
                 android:layout_width="wrap_content"
@@ -29,6 +36,13 @@
                 android:layout_weight="1"
                 android:text="@string/interest_default"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <Button
+                android:id="@+id/interest_forward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Forward" />
         </LinearLayout>
 
         <ListView

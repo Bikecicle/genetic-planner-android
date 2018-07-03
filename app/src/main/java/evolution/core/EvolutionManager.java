@@ -40,7 +40,7 @@ public class EvolutionManager {
 		}
 	}
 
-	public void runScoreThreshold(int score) {
+	public void runScoreThreshold(double score) {
 		while (pop.getFittest().getScore() < score) {
 			pop = selector.nextGeneration(pop);
 			if (logging)
