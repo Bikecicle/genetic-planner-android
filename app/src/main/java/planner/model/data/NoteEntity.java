@@ -5,6 +5,9 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
+import planner.model.item.Item;
+import planner.model.item.Note;
+
 /**
  * Created by Griffin Page on 3/14/2018
  * griffinpage9@gmail.com
@@ -26,5 +29,21 @@ public class NoteEntity {
     public int parentId;
 
     public NoteEntity() {
+    }
+
+    public static Note fromEntity(NoteEntity entity) {
+        return new Note(entity.noteId, entity.title, entity.details, entity.start, entity.duration,
+                null);
+    }
+
+    public static  NoteEntity toEntity(Note note) {
+        NoteEntity entity = new NoteEntity();
+        entity.noteId = note.noteId;
+        entity.title = note.title;
+        entity.details = note.details;
+        entity.start = note.start;
+        entity.duration = note.duration;
+        entity.parentId = note.parent.itemId;
+        return entity;
     }
 }

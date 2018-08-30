@@ -75,20 +75,4 @@ public class Note implements Comparable<Note>, Serializable {
 	public long getEnd() {
 		return start + duration;
 	}
-
-	public static Note fromEntity(NoteEntity entity, Item parent) {
-		return new Note(entity.noteId, entity.title, entity.details, entity.start, entity.duration,
-                parent);
-	}
-
-	public static  NoteEntity toEntity(Note note) {
-		NoteEntity entity = new NoteEntity();
-		entity.noteId = note.noteId;
-		entity.title = note.title;
-		entity.details = note.details;
-		entity.start = note.start;
-		entity.duration = note.duration;
-		entity.parentId = note.parent.itemId;
-		return entity;
-	}
 }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import planner.model.core.PlanningAssistant;
+import planner.model.data.FileSystemAndroid;
 import planner.model.data.RoomDBAndroid;
 import planner.model.item.Note;
 
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-        planningAssistant = PlanningAssistant.getInstance(new RoomDBAndroid(this, false));
+        planningAssistant = PlanningAssistant.getInstance(new FileSystemAndroid(this));
 
         List<Note> notes = planningAssistant.getAll();
         ListView noteList = findViewById(R.id.main_note_list);

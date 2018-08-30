@@ -11,7 +11,6 @@ public class Event extends Item implements Comparable<Event> {
 
 	public static final long serialVersionUID = 2185845103699193125L;
 	public long start;
-	public long end; // For recurring events
 	public long duration;
 	public boolean complete;
 	public boolean recurring;
@@ -26,13 +25,12 @@ public class Event extends Item implements Comparable<Event> {
 		recurrence = null;
 	}
 
-	public Event(int itemId, String title, String details, long start, long duration, Recurrence recurrence, long end) {
+	public Event(int itemId, String title, String details, long start, long duration, Recurrence recurrence) {
 		super(itemId, ItemType.event, title, details);
 		this.start = start;
 		this.duration = duration;
 		if (recurrence != null) {
 			this.recurrence = recurrence;
-			this.end = end;
 			recurring = true;
 		}
 	}
@@ -45,7 +43,7 @@ public class Event extends Item implements Comparable<Event> {
 			if (!recurring) {
 				newNotes.add(new Note(noteId, title, details, start, duration, this));
 			} else {
-				ArrayList<Long> instances = recurrence.getInstances(start, end);
+				ArrayList<Long> instances = recurrence.getInstances(start);
 				for (long instance : instances) {
 					newNotes.add(new Note(noteId, title, details, instance, duration, this));
 				}
@@ -58,11 +56,11 @@ public class Event extends Item implements Comparable<Event> {
 	@Override
 	public void complete(Note note) {
 		if (recurring) {
-			ArrayList<Long> instances = recurrence.getInstances(start, end);
+			ArrayList<Long> instances = recurrence.getInstances(start);
 			if (instances.size() == 1) {
 				complete = true;
 			} else {
-				start = instances.get(1).longValue();
+				start = instances.get(1);
 			}
 		} else {
 			complete = true;
@@ -100,7 +98,7 @@ public class Event extends Item implements Comparable<Event> {
 	
 	public Calendar getRecurrenceEnd() {
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(end);
+		cal.setTimeInMillis(recurrence.end);
 		return cal;
 	}
 }

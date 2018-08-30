@@ -9,15 +9,16 @@ public class Recurrence implements Serializable {
 	private static final long serialVersionUID = -3994701701484893544L;
 	public int scale;
 	public int period;
+	public long end;
 	public ArrayList<Marker> markers;
 
-	public Recurrence(int scale, int period, ArrayList<Marker> markers) {
+	public Recurrence(int scale, int period, long end, ArrayList<Marker> markers) {
 		this.scale = scale;
 		this.period = period;
 		this.markers = markers;
 	}
 
-	public ArrayList<Long> getInstances(long start, long end) {
+	public ArrayList<Long> getInstances(long start) {
 		ArrayList<Long> instances = new ArrayList<Long>();
 		long current = start;
 		Calendar cal = Calendar.getInstance();
