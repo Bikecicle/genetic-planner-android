@@ -1,14 +1,17 @@
 package planner.model.item;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import planner.model.data.ItemEntity;
-
+@Entity
 public abstract class Item implements Serializable {
 	
 	private static final long serialVersionUID = -7943195019888260373L;
 
+	@PrimaryKey
 	public int itemId;
 	public ItemType type;
 	public String title;

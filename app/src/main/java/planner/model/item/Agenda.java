@@ -1,10 +1,13 @@
 package planner.model.item;
 
+import android.arch.persistence.room.Dao;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Agenda implements Serializable {
+@Dao
+public interface Agenda {
 
 	private static final long serialVersionUID = 8095770957990266696L;
 

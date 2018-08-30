@@ -1,5 +1,7 @@
 package planner.model.item;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
@@ -8,40 +10,32 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import planner.model.core.C;
-import planner.model.data.NoteEntity;
 
+@Entity
 public class Note implements Comparable<Note>, Serializable {
 
 	private static final long serialVersionUID = 5710812068584817767L;
 
+	@PrimaryKey
 	public int noteId;
 	public String title;
 	public String details;
 	public long start;
 	public long duration;
 
-	public Item parent;
+	public int itemId;
 
-	public Note(int noteId, String title, String details, long start, long duration, Item parent) {
+	public Note(int noteId, String title, String details, long start, long duration, int itemId) {
 		this.noteId = noteId;
 		this.title = title;
 		this.details = details;
 		this.start = start;
 		this.duration = duration;
-		this.noteId = hashCode();
-		this.parent = parent;
-	}
-
-	public Note(long start, long duration) {
-		title = null;
-		details = null;
-		this.start = start;
-		this.duration = duration;
-		parent = null;
+		this.itemId = itemId;
 	}
 
 	public void complete() {
-		parent.complete(this);
+		// TODO parent.complete(this);
 	}
 
 	@Override
