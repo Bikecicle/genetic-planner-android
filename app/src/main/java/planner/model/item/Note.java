@@ -11,7 +11,7 @@ import java.util.Locale;
 
 import planner.model.core.C;
 
-@Entity
+@Entity(tableName = "notes")
 public class Note implements Comparable<Note>, Serializable {
 
 	private static final long serialVersionUID = 5710812068584817767L;

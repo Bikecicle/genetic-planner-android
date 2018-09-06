@@ -12,10 +12,8 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import planner.model.data.RoomDBAndroid;
-import planner.model.item.Agenda;
 import planner.model.item.Event;
 import planner.model.item.Note;
-import planner.model.item.Schedule;
 import planner.model.item.Task;
 
 import static org.junit.Assert.*;

@@ -2,10 +2,11 @@ package planner.model.core;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+
 import evolution.core.Genome;
 import planner.model.item.Agenda;
 import planner.model.item.Event;
-import planner.model.item.Schedule;
 import planner.model.item.Note;
 import planner.model.item.Task;
 
@@ -24,11 +25,12 @@ public class ScheduleGenome implements Genome {
 	public ScheduleGenome(Agenda agenda, double mutationRate) {
 		this.agenda = agenda;
 		this.mutationRate = mutationRate;
-		taskGenome = new long[agenda.tasks.size()][];
+		List<Task> tasks = agenda.getTasks();
+		taskGenome = new long[tasks.size()][];
 
 		Task task = null;
-		for (int i = 0; i < agenda.tasks.size(); i++) {
-			task = agenda.tasks.get(i);
+		for (int i = 0; i < tasks.size(); i++) {
+			task = tasks.get(i);
 			taskGenome[i] = new long[(int) (task.getRemaining() / C.HOUR)];
 		}
 		randomize();

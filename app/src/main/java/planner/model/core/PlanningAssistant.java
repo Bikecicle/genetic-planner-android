@@ -1,5 +1,7 @@
 package planner.model.core;
 
+import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -8,52 +10,35 @@ import java.util.List;
 import evolution.core.EvolutionManager;
 import evolution.core.Population;
 import planner.model.data.DataManager;
-import planner.model.item.Agenda;
 import planner.model.item.Item;
 import planner.model.item.Note;
-import planner.model.item.Schedule;
 
 public class PlanningAssistant {
-
-    private static PlanningAssistant planningAssistant;
 
     private final String TAG = "Planning";
     private final boolean loggingEnabled = false;
 
-    private DataManager dataManager;
+    PlannerDatabase database;
 
-    PlanningAssistant(DataManager dataManager) {
-        this.dataManager = dataManager;
-        dataManager.load();
-    }
-
-    public static PlanningAssistant getInstance(DataManager dataManager) {
-        if (planningAssistant == null) {
-            planningAssistant = new PlanningAssistant(dataManager);
-        }
-        return planningAssistant;
-    }
-
-    public void load() {
-        dataManager.load();
-    }
-
-    public void save() {
-        dataManager.save();
+    public PlanningAssistant(Context context, boolean inMemory) {
+        if (!inMemory)
+            database = Room.databaseBuilder(context.getApplicationContext(),
+                    PlannerDatabase.class, "planner_database").allowMainThreadQueries().build();
+        else
+            database = Room.inMemoryDatabaseBuilder(context, PlannerDatabase.class).build();
     }
 
     public void planSchedule() {
-        dataManager.cleanAgenda();
+        agenda.clean();
         Population initialPopulation = new Population();
         for (int i = 0; i < C.POPULATION_SIZE; i++) {
-            initialPopulation.add(new ScheduleGenome(dataManager.getAgenda(), C.MUTATION_RATE));
+            initialPopulation.add(new ScheduleGenome(agenda, C.MUTATION_RATE));
         }
         EvolutionManager evolutionManager = new EvolutionManager(initialPopulation, C.SELECTOR, loggingEnabled);
         evolutionManager.runGenerations(C.GENERATION_COUNT);
         if (loggingEnabled)
             evolutionManager.saveLog(C.logFile);
         Log.d("TAG", "Schedule evolved: " + evolutionManager.getResult());
-        dataManager.setSchedule(((ScheduleGenome) evolutionManager.getResult()).generateSchedule());
     }
 
     public Note getFirst() {

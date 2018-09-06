@@ -1,5 +1,7 @@
 package planner.model.item;
 
+import android.arch.persistence.room.Entity;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,9 +9,15 @@ import java.util.Calendar;
 
 import planner.model.core.C;
 
-public class Task extends Item implements Comparable<Task> {
+@Entity(tableName = "tasks")
+public class Task implements Item, Comparable<Task> {
 
 	private static final long serialVersionUID = 2422355433614515809L;
+
+	public int itemId;
+	public ItemType type;
+	public String title;
+	public String details;
 
 	public long deadline;
 	public long duration;
@@ -17,26 +25,10 @@ public class Task extends Item implements Comparable<Task> {
 	public long planned;
 
 	public Task(int itemId, String title, String details, long deadline, long duration) {
-		super(itemId, ItemType.task, title, details);
 		this.deadline = deadline;
 		this.duration = duration;
 		this.complete = 0;
 		this.planned = 0;
-	}
-
-	public Task(int itemId, String title, String details, String deadlineDate, int minutes) {
-		super(itemId, ItemType.task, title, details);
-		Calendar c = Calendar.getInstance();
-		try {
-			c.setTime(new SimpleDateFormat(C.DATE_TIME_FORMAT).parse(deadlineDate));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		deadline = c.getTimeInMillis();
-		duration = minutes * C.MINUTE;
-		complete = 0;
-		planned = 0;
 	}
 
 	@Override
@@ -52,9 +44,8 @@ public class Task extends Item implements Comparable<Task> {
 				tabDuration = getRemaining();
 				planned += getRemaining();
 			}
-			newNotes.add(new Note(noteId, title, details, genome[i], tabDuration, this));
+			newNotes.add(new Note(noteId, title, details, genome[i], tabDuration, itemId));
 		}
-		notes.addAll(newNotes);
 		return newNotes;
 	}
 
@@ -62,13 +53,12 @@ public class Task extends Item implements Comparable<Task> {
 	public void complete(Note note) {
 		planned -= note.duration;
 		complete += note.duration;
-		notes.remove(note);
 	}
 
 	@Override
 	public void clean() {
 		planned = 0;
-		super.clean();
+		// TODO
 	}
 
 	@Override

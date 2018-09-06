@@ -1,42 +1,13 @@
 package planner.model.item;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
-@Entity
-public abstract class Item implements Serializable {
+public interface Item extends Serializable {
 	
-	private static final long serialVersionUID = -7943195019888260373L;
+	public ArrayList<Note> generateNotes(long[] gene);
 
-	@PrimaryKey
-	public int itemId;
-	public ItemType type;
-	public String title;
-	public String details;
+	public void complete(Note note);
 
-	public ArrayList<Note> notes;
-
-	public Item(int itemId, ItemType type, String title, String details) {
-		this.itemId = itemId;
-		this.type = type;
-		this.title = title;
-		this.details = details;
-		this.notes = new ArrayList<>();
-	}
-	
-	public abstract ArrayList<Note> generateNotes(long[] gene);
-	
-	public abstract void complete(Note note);
-	
-	public void clean() {
-		notes.clear();
-	}
-
-	@Override
-	public String toString() {
-		return super.toString();
-	}
+	public void clean();
 }

@@ -1,8 +1,5 @@
 package planner.model.data;
 
-import planner.model.item.Agenda;
-import planner.model.item.Schedule;
-
 /**
  * Created by Griffin on 3/20/2018.
  */
